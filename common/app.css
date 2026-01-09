@@ -3,12 +3,14 @@
 page {
 	background-color: #fafafa;
 	font-size: 32rpx;
+	font-family: -apple-system-font, Helvetica Neue, Helvetica, sans-serif;
 }
 
 ::-webkit-scrollbar {
-	width: 0;
-	height: 0;
-	color: transparent;
+	width: 0 !important;
+	height: 0 !important;
+	color: transparent !important;
+	display: none;
 }
 
 button::after {
@@ -24,6 +26,7 @@ button::after {
 .tui-phcolor {
 	color: #ccc;
 	font-size: 32rpx;
+	overflow: visible;
 }
 
 

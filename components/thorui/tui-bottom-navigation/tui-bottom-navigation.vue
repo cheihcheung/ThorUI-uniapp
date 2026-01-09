@@ -1,23 +1,22 @@
 <template>
 	<view @touchmove.stop.prevent="stop">
-		<view class="tui-bottom-navigation" :class="{ 'tui-navigation-fixed': isFixed, 'tui-remove-splitLine': unlined }">
+		<view class="tui-bottom-navigation" :style="{ backgroundColor: isDarkMode ? '#202020' : backgroundColor }" :class="{ 'tui-navigation-fixed': isFixed, 'tui-remove-splitLine': unlined }">
 			<view
 				class="tui-navigation-item"
 				:class="{ 'tui-item-after_height': splitLineScale, 'tui-last-item': index == itemList.length - 1 }"
-				:style="{ backgroundColor: isDarkMode ? '#202020' : backgroundColor }"
 				v-for="(item, index) in itemList"
 				:key="index"
 			>
 				<view class="tui-item-inner" @tap="menuClick(index, item.parameter, item.type)">
 					<image
-						:src="current | getIcon(index, item)"
+						:src="getIcon(current,index, item)"
 						class="tui-navigation-img"
 						v-if="item.iconPath || (current == index && item.selectedIconPath && item.type == 1)"
 					></image>
 					<text
 						class="tui-navigation-text"
 						:style="{
-							color: isDarkMode ? '#fff' : current == index && item.type == 1 ? selectedColor : item.color || color,
+							color: isDarkMode ? '#fff' : current == index && item.type == 1 ? getSelectColor : item.color || color,
 							fontWeight: current == index && bold && item.type == 1 ? 'bold' : 'normal',
 							fontSize: fontSize
 						}"
@@ -38,7 +37,7 @@
 						:hover-stay-time="150"
 						v-for="(subItem, subIndex) in item.itemList || []"
 						:key="subIndex"
-						@tap="subMenuClick(index, item.type, subIndex, subItem.parameter)"
+						@tap="subMenuClick(index, item.type, subIndex, subItem.parameter || '')"
 					>
 						<text class="tui-ellipsis" :style="{ color: isDarkMode ? '#fff' : subMenuColor, fontSize: subMenufontSize, lineHeight: subMenufontSize }">
 							{{ subItem.text }}
@@ -55,6 +54,7 @@
 <script>
 export default {
 	name: 'tuiBottomNavigation',
+	emits: ['click'],
 	props: {
 		//当前索引
 		current: {
@@ -103,7 +103,7 @@ export default {
 		//选中颜色
 		selectedColor: {
 			type: String,
-			default: '#5677fc'
+			default: ''
 		},
 		fontSize: {
 			type: String,
@@ -160,21 +160,24 @@ export default {
 			default: false
 		}
 	},
-	filters: {
+	data() {
+		return {
+			showMenuIndex: -1 //显示的菜单index
+		};
+	},
+	computed:{
+		getSelectColor(){
+			return this.selectedColor || (uni && uni.$tui && uni.$tui.color.primary) || '#5677fc';
+		}
+	},
+	methods: {
 		getIcon: function(current, index, item) {
 			let url = item.iconPath;
 			if (item.type == 1) {
 				url = current == index ? item.selectedIconPath || item.iconPath : item.iconPath;
 			}
 			return url;
-		}
-	},
-	data() {
-		return {
-			showMenuIndex: -1 //显示的菜单index
-		};
-	},
-	methods: {
+		},
 		stop() {
 			return false;
 		},
@@ -224,18 +227,20 @@ export default {
 	position: fixed !important;
 	left: 0;
 	bottom: 0;
+	padding-bottom: constant(safe-area-inset-bottom);
 	padding-bottom: env(safe-area-inset-bottom);
+	box-sizing: content-box;
 }
 
 .tui-bottom-navigation::after {
 	content: '';
 	width: 100%;
-	border-top: 1rpx solid #bfbfbf;
+	border-top: 1px solid #bfbfbf;
 	position: absolute;
 	top: 0;
 	left: 0;
 	transform: scaleY(0.5) translateZ(0);
-	transform-origin: 0 100%;
+	transform-origin: 0 0;
 	z-index: 1000;
 }
 .tui-remove-splitLine::before {
@@ -247,7 +252,6 @@ export default {
 	height: 100rpx;
 	position: relative;
 	box-sizing: border-box;
-	position: relative;
 }
 
 .tui-item-inner {
@@ -263,7 +267,7 @@ export default {
 	height: 100%;
 	content: '';
 	position: absolute;
-	border-right: 1rpx solid #bfbfbf;
+	border-right: 1px solid #bfbfbf;
 	transform: scaleX(0.5) translateZ(0);
 	right: 0;
 	top: 0;

@@ -1,22 +1,33 @@
 <template>
-	<view @touchmove.stop.prevent>
-		<view class="tui-fab-box" :class="{'tui-fab-right':!left || (left && right)}" :style="{left:getLeft(),right:getRight(),bottom:bottom+'rpx'}">
-			<view class="tui-fab-btn" :class="{'tui-visible':isOpen,'tui-fab-hidden':hidden}">
-				<view class="tui-fab-item-box" :class="{'tui-fab-item-left':left && !right && item.imgUrl}" v-for="(item,index) in btnList"
-				 :key="index" @tap.stop="handleClick(index)">
-					<view :class="[left && !right?'tui-text-left':'tui-text-right']" v-if="item.imgUrl" :style="{fontSize:item.fontSize+'rpx',color:item.color}">{{item.text || ""}}</view>
-					<view class="tui-fab-item" :style="{width:width+'rpx',height:height+'rpx',background:item.bgColor || bgColor,borderRadius:radius}">
-						<view class="tui-fab-title" v-if="!item.imgUrl" :style="{fontSize:item.fontSize+'rpx',color:item.color}">{{item.text || ""}}</view>
-						<image :src="item.imgUrl" class="tui-fab-img" v-else :style="{width:item.imgWidth+'rpx',height:item.imgHeight+'rpx'}"></image>
+	<view>
+		<view class="tui-fab-box"
+			:class="{'tui-fab-right':left==0 || (left && right),'tui-fab__box-bottom':bottom && top == 0,'tui-fab__box-top':!(bottom && top == 0)}"
+			:style="getStyles">
+			<view class="tui-fab-btn" :class="{'tui-visible':isOpen,'tui-fab-hidden':isHidden}">
+				<view class="tui-fab-item-box"
+					:class="{'tui-fab-item-left':left && right==0 && item[imgField],'tui-fab__pb40':bottom && top == 0,'tui-fab__pt40':!(bottom && top == 0)}"
+					v-for="(item,index) in btnList" :key="index" @tap.stop="handleClick(index)">
+					<view :class="[left && right==0?'tui-text-left':'tui-text-right']" v-if="item[imgField]"
+						:style="{fontSize:(item.fontSize || size)+'rpx',color:item.color}">{{item[textField] || ""}}
+					</view>
+					<view class="tui-fab-item"
+						:style="{width:width+'rpx',height:height+'rpx',background:item.bgColor || getBgColor,borderRadius:radius}">
+						<view class="tui-fab-title" v-if="!item[imgField]"
+							:style="{fontSize:(item.fontSize || size)+'rpx',color:item.color}">{{item[textField] || ""}}
+						</view>
+						<image :src="item[imgField]" class="tui-fab-img" v-else
+							:style="{width:(item.imgWidth || 64)+'rpx',height:(item.imgHeight || 64)+'rpx'}"></image>
 					</view>
 				</view>
 			</view>
-			<view class="tui-fab-item" :class="{'tui-active':isOpen}" :style="{width:width+'rpx',height:height+'rpx',borderRadius:radius,background:bgColor,color:color}"
-			 @tap.stop="handleClick(-1)">
-				<view class="tui-fab-icon tui-icon-plus"></view>
+			<view class="tui-fab-item" :class="{'tui-active':isOpen}"
+				:style="{width:width+'rpx',height:height+'rpx',borderRadius:radius,background:getBgColor,color:color}"
+				@tap.stop="handleClick(-1)">
+				<text class="tui-fab-icon tui-icon-plus" v-if="!custom"></text>
+				<slot></slot>
 			</view>
 		</view>
-		<view class="tui-fab-mask" :class="{'tui-visible':isOpen}" @tap="handleClickCancel"></view>
+		<view class="tui-fab-mask" :style="getZIndex" :class="{'tui-visible':isOpen}" @tap="handleClickCancel"></view>
 	</view>
 </template>
 
@@ -24,30 +35,40 @@
 	//拓展出来的按钮不应多于6个，否则违反了作为悬浮按钮的快速、高效的原则
 	export default {
 		name: "tuiFab",
+		emits: ['click'],
 		props: {
 			//rpx 为0时值为auto
 			left: {
-				type: Number,
+				type: [Number, String],
 				default: 0
 			},
 			//rpx 当为0时且left不为0，值为auto
 			right: {
-				type: Number,
+				type: [Number, String],
 				default: 80
 			},
 			//rpx bottom值
 			bottom: {
-				type: Number,
+				type: [Number, String],
 				default: 100
+			},
+			//rpx top值
+			top: {
+				type: [Number, String],
+				default: 0
+			},
+			zIndex: {
+				type: [Number, String],
+				default: 997
 			},
 			//默认按钮 宽度 rpx
 			width: {
-				type: Number,
+				type: [Number, String],
 				default: 108
 			},
 			//默认按钮 高度 rpx
 			height: {
-				type: Number,
+				type: [Number, String],
 				default: 108
 			},
 			//圆角值
@@ -55,35 +76,38 @@
 				type: String,
 				default: "50%"
 			},
+			//默认按钮自定义内容[替换加号]
+			custom: {
+				type: Boolean,
+				default: false
+			},
 			//默认按钮背景颜色
 			bgColor: {
 				type: String,
-				default: "#5677fc"
+				default: ""
 			},
 			//字体颜色
 			color: {
 				type: String,
 				default: "#fff"
 			},
-			//拓展按钮
-			// bgColor: "#5677fc",
-			// //图标/图片地址
-			// imgUrl: "/static/images/fab/fab_reward.png",
-			// //图片高度 rpx
-			// imgHeight: 60,
-			// //图片宽度 rpx
-			// imgWidth: 60,
-			// //名称
-			// text: "名称",
-			// //字体大小
-			// fontSize: 30,
-			// //字体颜色
-			// color: "#fff"
 			btnList: {
 				type: Array,
 				default () {
 					return []
 				}
+			},
+			textField: {
+				type: String,
+				default: "text"
+			},
+			imgField: {
+				type: String,
+				default: "imgUrl"
+			},
+			size: {
+				type: [Number, String],
+				default: 28
 			},
 			//点击遮罩 是否可关闭
 			maskClosable: {
@@ -91,30 +115,51 @@
 				default: false
 			}
 		},
+		computed: {
+			getBgColor() {
+				return this.bgColor || (uni && uni.$tui && uni.$tui.color.primary) || '#5677fc';
+			},
+			getStyles() {
+				let style = `z-index:${this.zIndex};`;
+				if (this.left && this.right == 0) {
+					style += `left:${this.left}rpx;`
+				} else {
+					style += `right:${this.right}rpx;`
+				}
+
+				if (this.bottom && this.top == 0) {
+					style += `bottom:${this.bottom}rpx;`
+				} else {
+					style += `top:${this.top}rpx;`
+				}
+				return style
+			},
+			getZIndex() {
+				return Number(this.zIndex) - 2
+			}
+		},
 		data() {
 			return {
 				isOpen: false,
-				hidden: true,
+				isHidden: true,
 				timer: null
 			};
 		},
+		// #ifndef VUE3
+		beforeDestroy() {
+			clearTimeout(this.timer)
+			this.timer = null
+		},
+		// #endif
+		// #ifdef VUE3
+		beforeUnmount() {
+			clearTimeout(this.timer)
+			this.timer = null
+		},
+		// #endif
 		methods: {
-			getLeft() {
-				let val = "auto"
-				if (this.left && !this.right) {
-					val = this.left + 'rpx'
-				}
-				return val
-			},
-			getRight() {
-				let val = this.right + 'rpx'
-				if (this.left && !this.right) {
-					val = "auto"
-				}
-				return val
-			},
 			handleClick: function(index) {
-				this.hidden = false
+				this.isHidden = false
 				clearTimeout(this.timer)
 				if (index == -1 && this.btnList.length) {
 					this.isOpen = !this.isOpen
@@ -126,7 +171,7 @@
 				}
 				if (!this.isOpen) {
 					this.timer = setTimeout(() => {
-						this.hidden = true
+						this.isHidden = true
 					}, 200)
 				}
 			},
@@ -134,10 +179,6 @@
 				if (!this.maskClosable) return;
 				this.isOpen = false
 			}
-		},
-		beforeDestroy() {
-			clearTimeout(this.timer)
-			this.timer = null
 		}
 	}
 </script>
@@ -165,9 +206,15 @@
 	.tui-fab-box {
 		display: flex;
 		justify-content: center;
-		flex-direction: column;
 		position: fixed;
-		z-index: 99997;
+	}
+
+	.tui-fab__box-bottom {
+		flex-direction: column;
+	}
+
+	.tui-fab__box-top {
+		flex-direction: column-reverse;
 	}
 
 	.tui-fab-right {
@@ -191,7 +238,14 @@
 		display: flex;
 		align-items: center;
 		justify-content: flex-end;
+	}
+
+	.tui-fab__pb40 {
 		padding-bottom: 40rpx;
+	}
+
+	.tui-fab__pt40 {
+		padding-top: 40rpx;
 	}
 
 	.tui-fab-item-left {
@@ -241,7 +295,6 @@
 		right: 0;
 		bottom: 0;
 		background: rgba(0, 0, 0, 0.75);
-		z-index: 99996;
 		transition: all 0.2s ease-in-out;
 		opacity: 0;
 		visibility: hidden;

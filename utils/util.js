@@ -60,13 +60,33 @@ const utils = {
 		} else {
 			return "";
 		}
+	},
+	rgbToHex: function (r, g, b) {
+		return "#" + utils.toHex(r) + utils.toHex(g) + utils.toHex(b)
+	},
+	toHex: function (n) {
+		n = parseInt(n, 10);
+		if (isNaN(n)) return "00";
+		n = Math.max(0, Math.min(n, 255));
+		return "0123456789ABCDEF".charAt((n - n % 16) / 16) +
+			"0123456789ABCDEF".charAt(n % 16);
+	},
+	hexToRgb(hex) {
+		let result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+		return result ? {
+			r: parseInt(result[1], 16),
+			g: parseInt(result[2], 16),
+			b: parseInt(result[3], 16)
+		} : null;
 	}
 }
 
-module.exports = {
+export default {
 	trim: utils.trim,
 	replaceAll: utils.replaceAll,
 	formatNumber: utils.formatNumber,
 	rmoney: utils.rmoney,
-	formatDate: utils.formatDate
+	formatDate: utils.formatDate,
+	rgbToHex: utils.rgbToHex,
+	hexToRgb: utils.hexToRgb
 }

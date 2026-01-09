@@ -26,6 +26,7 @@
  * */
 export default {
 	name: 'tuiScrollTop',
+	emits: ['index','share'],
 	props: {
 		//回顶部按钮距离底部距离 rpx
 		bottom: {
@@ -164,8 +165,6 @@ export default {
 
 .tui-color-white {
 	color: #fff;
-}
-.tui-share-btn {
 }
 .tui-share-btn {
 	background: transparent !important;

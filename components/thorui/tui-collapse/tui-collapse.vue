@@ -17,11 +17,12 @@
 <script>
 	export default {
 		name: "tuiCollapse",
+		emits: ['click'],
 		props: {
 			//collapse背景颜色
 			bgColor: {
 				type: String,
-				default: 'none'
+				default: 'transparent'
 			},
 			//collapse-head 背景颜色
 			hdBgColor: {
@@ -31,7 +32,7 @@
 			//collapse-body 背景颜色
 			bdBgColor: {
 				type: String,
-				default: 'none'
+				default: 'transparent'
 			},
 			//collapse-body实际高度 open时使用
 			height: {

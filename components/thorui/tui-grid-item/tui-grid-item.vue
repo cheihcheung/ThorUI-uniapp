@@ -1,5 +1,5 @@
 <template>
-	<view class="tui-grid" :class="[bottom?'':'tui-grid-bottom','tui-grid-'+(cell<2?3:cell)]" :hover-class="hover?'tui-item-hover':''"
+	<view class="tui-grid" :class="[bottomLine?'':'tui-grid-bottom',border?'':'tui-grid__unlined','tui-grid-'+(cell<2?3:cell)]" :hover-class="hover?'tui-item-hover':''"
 	 :hover-stay-time="150" :style="{backgroundColor:backgroundColor}" @tap="handleClick">
 		<view class='tui-grid-bg'>
 			<slot></slot>
@@ -10,6 +10,7 @@
 <script>
 	export default {
 		name: "tuiGridItem",
+		emits: ['click'],
 		props: {
 			cell: {
 				type: [Number,String],
@@ -24,8 +25,13 @@
 				type: Boolean,
 				default: true
 			},
-			//底部线条
-			bottom: {
+			//是否需要底部线条
+			bottomLine: {
+				type: Boolean,
+				default: true
+			},
+			//是否需要纵向边框线条
+			border:{
 				type: Boolean,
 				default: true
 			},
@@ -52,6 +58,11 @@
 		background: #fff;
 		float: left;
 	}
+	/* #ifdef MP-BAIDU */
+	.tui-grid:active{
+		background-color: #f7f7f9;
+	}
+	/* #endif */
 
 	.tui-grid-2 {
 		width: 50%;
@@ -103,6 +114,11 @@
 		transform-origin: 100% 0;
 		-webkit-transform: scaleX(0.5);
 		transform: scaleX(0.5);
+	}
+	
+	.tui-grid__unlined::before{
+		width: 0 !important;
+		border-right: 0 !important;
 	}
 
 	.tui-grid::after {

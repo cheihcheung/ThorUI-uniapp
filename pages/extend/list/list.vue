@@ -32,7 +32,7 @@
 			<tui-list-cell @click="detail" :arrow="true" color="#19be6b">
 				无上下线条,可单独设置，改变颜色
 			</tui-list-cell>
-			<tui-list-cell @click="detail" :arrow="true">
+			<tui-list-cell unlined @click="detail" :arrow="true">
 				无上下线条,可单独设置，改变颜色
 			</tui-list-cell>
 		</tui-list-view>
@@ -90,7 +90,8 @@
 		</tui-list-view>
 
 		<tui-list-view title="消息列表">
-			<tui-list-cell :lineLeft="false" @click="detail">
+			
+			<tui-list-cell lineLeft="0" @click="detail">
 				<view class="tui-item-box">
 					<view class="tui-msg-box">
 						<image src="/static/images/news/avatar_1.jpg" class="tui-msg-pic" mode="widthFix"></image>
@@ -105,7 +106,7 @@
 					</view>
 				</view>
 			</tui-list-cell>
-			<tui-list-cell :lineLeft="false" @click="detail">
+			<tui-list-cell lineLeft="0" @click="detail">
 				<view class="tui-item-box">
 					<view class="tui-msg-box">
 						<image src="/static/images/news/avatar_2.jpg" class="tui-msg-pic" mode="widthFix"></image>
@@ -120,7 +121,7 @@
 					</view>
 				</view>
 			</tui-list-cell>
-			<tui-list-cell :lineLeft="false" @click="detail">
+			<tui-list-cell lineLeft="0" @click="detail">
 				<view class="tui-item-box">
 					<view class="tui-msg-box">
 						<image src="/static/images/news/3.jpg" class="tui-msg-pic" mode="widthFix"></image>
@@ -135,7 +136,7 @@
 					</view>
 				</view>
 			</tui-list-cell>
-			<tui-list-cell :lineLeft="false" @click="detail">
+			<tui-list-cell lineLeft="0" @click="detail">
 				<view class="tui-item-box">
 					<view class="tui-msg-box">
 						<image src="/static/images/news/4.jpg" class="tui-msg-pic" mode="widthFix"></image>
@@ -150,7 +151,7 @@
 					</view>
 				</view>
 			</tui-list-cell>
-			<tui-list-cell :lineLeft="false" @click="detail">
+			<tui-list-cell lineLeft="0" @click="detail">
 				<view class="tui-item-box">
 					<view class="tui-msg-box">
 						<image src="/static/images/news/avatar_1.jpg" class="tui-msg-pic" mode="widthFix"></image>
@@ -165,7 +166,7 @@
 					</view>
 				</view>
 			</tui-list-cell>
-			<tui-list-cell :lineLeft="false" @click="detail" unlined>
+			<tui-list-cell lineLeft="0" @click="detail" unlined>
 				<view class="tui-item-box">
 					<view class="tui-msg-box">
 						<image src="/static/images/news/avatar_2.jpg" class="tui-msg-pic" mode="widthFix"></image>

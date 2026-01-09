@@ -1,153 +1,129 @@
 <template>
-	<view
-		:class="[dot ? 'tui-badge-dot' : 'tui-badge', 'tui-' + type, !dot ? 'tui-badge-scale' : '']"
-		:style="{ top: top, right: right, position: absolute ? 'absolute' : 'static', transform: getStyle, margin: margin }"
-		@tap="handleClick"
-	>
+	<view :class="[dot ? 'tui-badge-dot' : 'tui-badge', !dot ? 'tui-badge-scale' : '']"
+		:style="{ top: top, right: right, position: absolute ? 'absolute' : 'static', transform: getStyle, margin: margin,background:getBackground,color:getColor }"
+		@tap="handleClick">
 		<slot></slot>
 	</view>
 </template>
 
 <script>
-export default {
-	name: 'tuiBadge',
-	props: {
-		//primary,warning,green,danger,white，black，gray,white_red
-		type: {
-			type: String,
-			default: 'primary'
+	export default {
+		name: 'tuiBadge',
+		emits: ['click'],
+		props: {
+			//primary,warning,green,danger,white，black，gray,white_red
+			type: {
+				type: String,
+				default: 'primary'
+			},
+			//是否是圆点
+			dot: {
+				type: Boolean,
+				default: false
+			},
+			margin: {
+				type: String,
+				default: '0'
+			},
+			//是否绝对定位
+			absolute: {
+				type: Boolean,
+				default: false
+			},
+			top: {
+				type: String,
+				default: '-8rpx'
+			},
+			right: {
+				type: String,
+				default: '0'
+			},
+			//缩放比例
+			scaleRatio: {
+				type: Number,
+				default: 1
+			},
+			//水平方向移动距离
+			translateX: {
+				type: String,
+				default: '0'
+			}
 		},
-		//是否是圆点
-		dot: {
-			type: Boolean,
-			default: false
+		computed: {
+			getStyle() {
+				return `scale(${this.scaleRatio}) translateX(${this.translateX})`;
+			},
+			getBackground() {
+				const global = uni && uni.$tui && uni.$tui.color;
+				let color = {
+					'primary': (global && global.primary) || '#5677fc',
+					'green': (global && global.success) || '#07c160',
+					'warning': (global && global.warning) || '#ff7900',
+					'danger': (global && global.danger) || '#EB0909',
+					'white': '#fff',
+					'black': '#000',
+					'gray': '#ededed',
+					'red': (global && global.pink) || '#f74d54',
+					'pink': (global && global.pink) || '#f74d54',
+					'white_red': '#fff',
+					'white_primary': '#fff',
+					'white_green': '#fff',
+					'white_warning': '#fff',
+					'white_pink': '#fff'
+				} [this.type]
+				return color
+			},
+			getColor() {
+				const global = uni && uni.$tui && uni.$tui.color;
+				let color = {
+					'primary': '#fff',
+					'green': '#fff',
+					'warning': '#fff',
+					'danger': '#fff',
+					'white': '#333',
+					'black': '#fff',
+					'gray': '#999',
+					'red': '#fff',
+					'pink': (global && global.pink) || '#f74d54',
+					'white_red': (global && global.danger) || '#EB0909',
+					'white_primary': (global && global.primary) || '#5677fc',
+					'white_green': (global && global.success) || '#07c160',
+					'white_warning': (global && global.warning) || '#ff7900',
+					'white_pink': (global && global.pink) || '#f74d54',
+				} [this.type]
+				return color
+			}
 		},
-		margin: {
-			type: String,
-			default: '0'
-		},
-		//是否绝对定位
-		absolute: {
-			type: Boolean,
-			default: false
-		},
-		top: {
-			type: String,
-			default: '-8rpx'
-		},
-		right: {
-			type: String,
-			default: '0'
-		},
-		//缩放比例
-		scaleRatio: {
-			type: Number,
-			default: 1
-		},
-		//水平方向移动距离
-		translateX: {
-			type: String,
-			default: '0'
+		methods: {
+			handleClick() {
+				this.$emit('click', {});
+			}
 		}
-	},
-	computed: {
-		getStyle() {
-			return `scale(${this.scaleRatio}) translateX(${this.translateX})`;
-		}
-	},
-	methods: {
-		handleClick() {
-			this.$emit('click', {});
-		}
-	}
-};
+	};
 </script>
 
 <style scoped>
-/* color start*/
+	.tui-badge-dot {
+		height: 8px;
+		width: 8px;
+		border-radius: 50%;
+	}
 
-.tui-primary {
-	background-color: #5677fc;
-	color: #fff;
-}
+	.tui-badge {
+		font-size: 24rpx;
+		line-height: 24rpx;
+		height: 36rpx;
+		min-width: 36rpx;
+		padding: 0 10rpx;
+		box-sizing: border-box;
+		border-radius: 100rpx;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		z-index: 10;
+	}
 
-.tui-danger {
-	background-color: #ed3f14;
-	color: #fff;
-}
-
-.tui-red {
-	background-color: #F74D54;
-	color: #fff;
-}
-
-.tui-warning {
-	background-color: #ff7900;
-	color: #fff;
-}
-
-.tui-green {
-	background-color: #19be6b;
-	color: #fff;
-}
-
-.tui-white {
-	background-color: #fff;
-	color: #333;
-}
-
-.tui-white_red {
-	background-color: #fff;
-	color: #F74D54;
-}
-.tui-white_primary {
-	background-color: #fff;
-	color: #5677fc;
-}
-.tui-white_green {
-	background-color: #fff;
-	color: #19be6b;
-}
-.tui-white_warning {
-	background-color: #fff;
-	color: #ff7900;
-}
-
-.tui-black {
-	background-color: #000;
-	color: #fff;
-}
-
-.tui-gray {
-	background-color: #ededed;
-	color: #999;
-}
-
-/* color end*/
-
-/* badge start*/
-
-.tui-badge-dot {
-	height: 16rpx;
-	width: 16rpx;
-	border-radius: 50%;
-}
-
-.tui-badge {
-	font-size: 24rpx;
-	height: 36rpx;
-	min-width: 12rpx;
-	padding: 0 12rpx;
-	border-radius: 36rpx;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	z-index: 10;
-}
-
-.tui-badge-scale {
-	transform-origin: center center;
-}
-
-/* badge end*/
+	.tui-badge-scale {
+		transform-origin: center center;
+	}
 </style>

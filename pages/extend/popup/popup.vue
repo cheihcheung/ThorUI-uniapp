@@ -61,7 +61,7 @@
 		<!--header 顶部下拉选择框-->
 
 		<view class="top-dropdown">
-			<tui-button type="white" shape="circle" @tap="btnDropChange(0)">顶部下拉列表</tui-button>
+			<tui-button type="white" shape="circle" @click="btnDropChange(0)">顶部下拉列表</tui-button>
 		</view>
 
 		<!--下拉选择框 dropdownlist-->
@@ -78,9 +78,12 @@
 					<view class="tui-selected-list">
 						<scroll-view scroll-y class="tui-dropdown-scroll">
 							<block v-for="(item,index) in dropdownlistData" :key="index">
-								<tui-list-cell @click="dropDownList(index)" :last="dropdownlistData.length-1==index">
-									<tui-icon :name="item.icon" :size="item.size" :color="item.color"></tui-icon>
-									<text class="tui-ml-20">{{item.name}}</text>
+								<tui-list-cell padding="0" @click="dropDownList(index)" :unlined="dropdownlistData.length-1==index">
+									<view class="tui-cell-class">
+										<tui-icon :name="item.icon" :size="item.size" :color="item.color"></tui-icon>
+										<text class="tui-ml-20">{{item.name}}</text>
+									</view>
+								
 								</tui-list-cell>
 							</block>
 						</scroll-view>
@@ -96,7 +99,7 @@
 
 
 		<!--底部分享弹窗-->
-		<tui-bottom-popup :show="popupShow" @close="popup">
+		<tui-bottom-popup backgroundColor="#f6f6f6"  :zIndex="1002" :maskZIndex="1001" :show="popupShow" @close="popup">
 			<view class="tui-share">
 				<view class="tui-share-title">分享到</view>
 				<scroll-view scroll-x style="padding-right:20rpx">
@@ -676,7 +679,6 @@
 	.tui-share {
 		background: #e8e8e8;
 		position: relative;
-		padding-bottom: env(safe-area-inset-bottom);
 	}
 
 	.tui-share-title {
@@ -746,7 +748,6 @@
 		display: flex;
 		align-items: center;
 		justify-content: center;
-		padding-bottom: env(safe-area-inset-bottom);
 	}
 
 	.tui-hover {

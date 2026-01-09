@@ -1,18 +1,28 @@
 <template>
-	<view class="tui-container">
+	<view class="tui-upload__container">
 		<view class="tui-upload-box">
-			<view class="tui-image-item" v-for="(item,index) in imageList" :key="index">
-				<image :src="item" class="tui-item-img" @tap.stop="previewImage(index)" mode="aspectFill"></image>
-				<view v-if="!forbidDel" class="tui-img-del" @tap.stop="delImage(index)"></view>
+			<view class="tui-image-item" :style="{width:width+'rpx',height:height+'rpx',borderRadius:radius+'rpx'}"
+				v-for="(item,index) in imageList" :key="index">
+				<image :src="item" class="tui-item-img"
+					:style="{width:width+'rpx',height:height+'rpx',borderRadius:radius+'rpx'}"
+					@tap.stop="previewImage(index)" mode="aspectFill"></image>
+				<view v-if="!forbidDel" class="tui-img-del" :style="{background:getDelColor}"
+					@tap.stop="delImage(index)">
+				</view>
 				<view v-if="statusArr[index]!=1" class="tui-upload-mask">
 					<view class="tui-upload-loading" v-if="statusArr[index]==2"></view>
 					<text class="tui-tips">{{statusArr[index]==2?'上传中...':'上传失败'}}</text>
-					<view class="tui-mask-btn" v-if="statusArr[index]==3" @tap.stop="reUpLoad(index)" hover-class="tui-btn-hover"
-					 :hover-stay-time="150">重新上传</view>
+					<view class="tui-mask-btn" v-if="statusArr[index]==3" @tap.stop="reUpLoad(index)"
+						hover-class="tui-btn-hover" :hover-stay-time="150">重新上传</view>
 				</view>
 			</view>
-			<view v-if="isShowAdd" class="tui-upload-add" @tap="chooseImage">
-				<view class="tui-upload-icon tui-icon-plus"></view>
+			<view v-if="isShowAdd" class="tui-upload-add"
+				:class="[borderColor!=='transparent'?'tui-upload__border':'tui-upload__unborder']"
+				:style="{width:width+'rpx',height:height+'rpx',background:background,borderRadius:radius+'rpx',borderColor:borderColor,borderStyle:borderSytle}"
+				@tap="chooseImage">
+				<slot>
+					<view class="tui-upload-icon tui-icon-plus" :style="{color:addColor,fontSize:addSize+'rpx'}"></view>
+				</slot>
 			</view>
 		</view>
 	</view>
@@ -21,7 +31,18 @@
 <script>
 	export default {
 		name: 'tuiUpload',
+		emits: ['remove', 'complete', 'reupload'],
 		props: {
+			//展示图片宽度
+			width: {
+				type: [Number, String],
+				default: 218
+			},
+			//展示图片高度
+			height: {
+				type: [Number, String],
+				default: 218
+			},
 			//初始化图片路径
 			value: {
 				type: Array,
@@ -29,17 +50,63 @@
 					return []
 				}
 			},
+			//2.3.0+
+			radius: {
+				type: [Number, String],
+				default: 0
+			},
+			//2.3.0+
+			background: {
+				type: String,
+				default: '#F7F7F7'
+			},
+			//2.3.0+
+			borderColor: {
+				type: String,
+				default: 'transparent'
+			},
+			//2.3.0+
+			//solid、dashed、dotted
+			borderSytle: {
+				type: String,
+				default: 'dashed'
+			},
+			//2.3.0+
+			delColor: {
+				type: String,
+				default: ''
+			},
+			//删除图片前是否弹框确认
+			delConfirm: {
+				type: Boolean,
+				default: false
+			},
 			//禁用删除
 			forbidDel: {
 				type: Boolean,
 				default: false
+			},
+			//V2.9.6+ 删除图片是否触发 @complete 事件
+			delTrigger:{
+				type: Boolean,
+				default: true
+			},
+			//2.3.0+
+			addColor: {
+				type: String,
+				default: '#888'
+			},
+			//2.3.0+
+			addSize: {
+				type: [Number, String],
+				default: 68
 			},
 			//禁用添加
 			forbidAdd: {
 				type: Boolean,
 				default: false
 			},
-			//服务器地址
+			//服务器接口地址。当接口地址为空时，直接返回本地图片地址
 			serverUrl: {
 				type: String,
 				default: ""
@@ -49,24 +116,76 @@
 				type: Number,
 				default: 9
 			},
-			//项目名，默认为 file
+			//original 原图，compressed 压缩图，默认二者都有
+			sizeType: {
+				type: Array,
+				default () {
+					return ['original', 'compressed']
+				}
+			},
+			//album 从相册选图，camera 使用相机，默认二者都有。如需直接开相机或直接选相册，请只使用一个选项
+			sourceType: {
+				type: Array,
+				default () {
+					return ['album', 'camera']
+				}
+			},
+			//可上传图片类型，默认为空，不限制  Array<String> ['jpg','png','gif']
+			imageFormat: {
+				type: Array,
+				default () {
+					return []
+				}
+			},
+			//单张图片大小限制 MB 
+			size: {
+				type: Number,
+				default: 4
+			},
+			//文件对应的key，默认为 file
 			fileKeyName: {
 				type: String,
 				default: "file"
+			},
+			//HTTP 请求 Header, header 中不能设置 Referer。
+			header: {
+				type: Object,
+				default () {
+					return {}
+				}
+			},
+			//HTTP 请求中其他额外的 form data
+			formData: {
+				type: Object,
+				default () {
+					return {}
+				}
+			},
+			//自定义参数
+			params: {
+				type: [Number, String],
+				default: 0
 			}
 		},
 		data() {
 			return {
 				//图片地址
 				imageList: [],
+				tempFiles: [],
 				//上传状态：1-上传成功 2-上传中 3-上传失败
-				statusArr: []
+				statusArr: [],
+				//传入回调函数上传
+				callUpload: false
 			}
 		},
 		created() {
-			this.imageList = [...this.value];
-			for (let item of this.imageList) {
-				this.statusArr.push("1")
+			this.initImages()
+		},
+		watch: {
+			value(val) {
+				if (val) {
+					this.initImages()
+				}
 			}
 		},
 		computed: {
@@ -76,20 +195,42 @@
 					isShow = false;
 				}
 				return isShow
+			},
+			getDelColor() {
+				return this.delColor || (uni && uni.$tui && uni.$tui.color.danger) || '#EB0909';
 			}
 		},
 		methods: {
+			initImages() {
+				this.statusArr = [];
+				this.imageList = [...this.value];
+				let tempFiles = []
+				for (let item of this.imageList) {
+					this.statusArr.push("1")
+					tempFiles.push({
+						path: item
+					})
+				}
+				this.tempFiles = tempFiles;
+			},
 			// 重新上传
 			reUpLoad(index) {
 				this.$set(this.statusArr, index, "2")
-				this.change()
-				this.uploadImage(index, this.imageList[index]).then(() => {
-					this.change()
-				}).catch(() => {
-					this.change()
+				this.$emit('reupload', {
+					index
 				})
+				if (!this.callUpload) {
+					this.uploadImage(index, this.imageList[index]).then(() => {
+						this.change()
+					}).catch(() => {
+						this.change()
+					})
+				}
 			},
-			change() {
+			/**
+			 * @param manual 是否手动上传
+			 **/
+			change(manual = false) {
 				let status = ~this.statusArr.indexOf("2") ? 2 : 1
 				if (status != 2 && ~this.statusArr.indexOf("3")) {
 					// 上传失败
@@ -97,27 +238,63 @@
 				}
 				this.$emit('complete', {
 					status: status,
-					imgArr: this.imageList
+					imgArr: this.imageList,
+					params: this.params,
+					manual: manual
 				})
+			},
+			toast(text) {
+				text && uni.showToast({
+					title: text,
+					icon: "none"
+				});
 			},
 			chooseImage: function() {
 				let _this = this;
 				uni.chooseImage({
 					count: _this.limit - _this.imageList.length,
+					sizeType: _this.sizeType,
+					sourceType: _this.sourceType,
 					success: function(e) {
 						let imageArr = [];
-						for (let i = 0; i < e.tempFilePaths.length; i++) {
+						for (let i = 0; i < e.tempFiles.length; i++) {
 							let len = _this.imageList.length;
 							if (len >= _this.limit) {
-								uni.showToast({
-									title: `最多可上传${_this.limit}张图片`,
-									icon: "none"
-								});
+								_this.toast(`最多可上传${_this.limit}张图片`);
 								break;
 							}
-							let path = e.tempFilePaths[i]
+							//过滤图片类型
+							let path = e.tempFiles[i].path;
+
+							if (_this.imageFormat.length > 0) {
+								let format = ""
+								// #ifdef H5
+								let type = e.tempFiles[i].type;
+								format = type.split('/')[1]
+								// #endif
+
+								// #ifndef H5
+								format = path.split(".")[(path.split(".")).length - 1];
+								// #endif
+
+								if (_this.imageFormat.indexOf(format) == -1) {
+									let text = `只能上传 ${_this.imageFormat.join(',')} 格式图片！`
+									_this.toast(text);
+									continue;
+								}
+							}
+
+							//过滤超出大小限制图片
+							let size = e.tempFiles[i].size;
+
+							if (_this.size * 1024 * 1024 < size) {
+								let err = `单张图片大小不能超过：${_this.size}MB`
+								_this.toast(err);
+								continue;
+							}
 							imageArr.push(path)
 							_this.imageList.push(path)
+							_this.tempFiles.push(e.tempFiles[i])
 							_this.statusArr.push("2")
 						}
 						_this.change()
@@ -141,19 +318,16 @@
 					}
 				})
 			},
-			uploadImage: function(index, url) {
+			uploadImage: function(index, url, serverUrl) {
 				let _this = this;
 				return new Promise((resolve, reject) => {
 					uni.uploadFile({
-						url: this.serverUrl,
+						url: this.serverUrl || serverUrl,
 						name: this.fileKeyName,
-						header: {
-							//设置请求头
-						},
-						formData: {},
+						header: this.header,
+						formData: this.formData,
 						filePath: url,
 						success: function(res) {
-							console.log(res)
 							if (res.statusCode == 200) {
 								//返回结果 此处需要按接口实际返回进行修改
 								let d = JSON.parse(res.data.replace(/\ufeff/g, "") || "{}")
@@ -181,12 +355,38 @@
 
 			},
 			delImage: function(index) {
-				this.imageList.splice(index, 1)
-				this.statusArr.splice(index, 1)
-				this.$emit("remove", {
-					index: index
-				})
-				this.change()
+				let that = this
+				if (this.delConfirm) {
+					uni.showModal({
+						title: '提示',
+						content: '确认删除该图片吗？',
+						showCancel: true,
+						cancelColor: "#555",
+						confirmColor: "#eb0909",
+						confirmText: "确定",
+						success(res) {
+							if (res.confirm) {
+								that.imageList.splice(index, 1)
+								that.tempFiles.splice(index, 1)
+								that.statusArr.splice(index, 1)
+								that.$emit("remove", {
+									index: index,
+									params: that.params
+								})
+								that.delTrigger && that.change()
+							}
+						}
+					})
+				} else {
+					that.imageList.splice(index, 1)
+					that.tempFiles.splice(index, 1)
+					that.statusArr.splice(index, 1)
+					that.$emit("remove", {
+						index: index,
+						params: that.params
+					})
+					that.delTrigger && that.change()
+				}
 			},
 			previewImage: function(index) {
 				if (!this.imageList.length) return;
@@ -195,6 +395,72 @@
 					loop: true,
 					urls: this.imageList
 				})
+			},
+			/**
+			 * 当属性serverUrl传空时，父级调用该方法一次性上传所有图片
+			 * @param serverUrl 服务器接口地址
+			 **/
+			uploadAllImage(serverUrl) {
+				if (!serverUrl) {
+					this.toast('服务器接口地址不能为空！');
+					return;
+				}
+				let imageArr = [...this.imageList]
+				const len = imageArr.length
+				for (let i = 0; i < len; i++) {
+					//如果是服务器地址图片则无需再次上传
+					if (imageArr[i].startsWith('https')) {
+						continue;
+					} else {
+						this.$set(this.statusArr, i, "2")
+						this.uploadImage(i, imageArr[i], serverUrl).then(() => {
+							if (i === len - 1) {
+								this.change(true)
+							}
+						}).catch(() => {
+							if (i === len - 1) {
+								this.change(true)
+							}
+						})
+					}
+				}
+			},
+			upload(callback, index) {
+				// 传入一个返回Promise的文件上传的函数
+				//上传状态：1-上传成功 2-上传中 3-上传失败
+				this.callUpload = true;
+				if (index === undefined || index === null) {
+					let urls = [...this.imageList]
+					const len = urls.length
+					for (let i = 0; i < len; i++) {
+						if (urls[i].startsWith('https')) {
+							continue;
+						} else {
+							this.$set(this.statusArr, i, "2")
+							if (typeof callback === 'function') {
+								callback(this.tempFiles[i]).then(res => {
+									this.$set(this.statusArr, i, '1')
+									this.imageList[i] = res
+									this.change(true)
+								}).catch(err => {
+									this.$set(this.statusArr, i, '3')
+								})
+							}
+						}
+					}
+				} else {
+					//如果传入index，则是重新上传时调用
+					this.$set(this.statusArr, index, "2")
+					if (typeof callback === 'function') {
+						callback(this.tempFiles[index]).then(res => {
+							this.$set(this.statusArr, index, '1')
+							this.imageList[index] = res
+							this.change(true)
+						}).catch(err => {
+							this.$set(this.statusArr, index, '3')
+						})
+					}
+				}
 			}
 		}
 	}
@@ -231,33 +497,34 @@
 	}
 
 	.tui-upload-add {
-		width: 220rpx;
-		height: 220rpx;
-		font-size: 68rpx;
 		font-weight: 100;
-		color: #888;
-		background-color: #F7F7F7;
 		display: flex;
 		align-items: center;
 		justify-content: center;
 		padding: 0;
+		overflow: hidden;
+		box-sizing: border-box;
+		/* #ifdef H5 */
+		cursor: pointer;
+		/* #endif */
+	}
+
+	.tui-upload__unborder {
+		border-width: 0;
+	}
+
+	.tui-upload__border {
+		border-width: 1px;
 	}
 
 	.tui-image-item {
-		width: 220rpx;
-		height: 220rpx;
 		position: relative;
 		margin-right: 20rpx;
 		margin-bottom: 20rpx;
-	}
-
-	.tui-image-item:nth-of-type(3n) {
-		margin-right: 0;
+		flex-shrink: 0;
 	}
 
 	.tui-item-img {
-		width: 220rpx;
-		height: 220rpx;
 		display: block;
 	}
 
@@ -267,11 +534,13 @@
 		position: absolute;
 		right: -12rpx;
 		top: -12rpx;
-		background-color: #EB0909;
 		border-radius: 50%;
 		color: white;
 		font-size: 34rpx;
-		z-index: 999;
+		z-index: 5;
+		/* #ifdef H5 */
+		cursor: pointer;
+		/* #endif */
 	}
 
 	.tui-img-del::before {
@@ -293,10 +562,11 @@
 		display: flex;
 		flex-direction: column;
 		align-items: center;
-		justify-content: space-around;
+		justify-content: center;
 		padding: 40rpx 0;
 		box-sizing: border-box;
 		background-color: rgba(0, 0, 0, 0.6);
+		z-index: 3;
 	}
 
 	.tui-upload-loading {
@@ -329,10 +599,12 @@
 		text-align: center;
 		font-size: 24rpx;
 		color: #fff;
-		border: 1rpx solid #fff;
+		border: 1px solid #fff;
 		display: flex;
 		align-items: center;
 		justify-content: center;
+		flex-shrink: 0;
+		margin-top: 26rpx;
 	}
 
 	.tui-btn-hover {

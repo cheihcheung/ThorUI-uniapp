@@ -5,8 +5,8 @@
 				<view class="search-bar-form">
 					<view class="search-bar-box">
 						<!-- <icon class="icon-search-in-box" type="search" size="16"></icon> -->
-						<input confirm-type="search" class="search-bar-input" placeholder="输入城市名称或首字母查询" placeholder-class="phcolor"
-						 :value="inputVal" :focus="inputShowed" @input="inputTyping" />
+						<input confirm-type="search" class="search-bar-input" placeholder="输入城市名称或首字母查询"
+							placeholder-class="phcolor" :value="inputVal" :focus="inputShowed" @input="inputTyping" />
 						<view class="icon-clear" v-if="inputVal" @tap="clearInput">
 							<!-- #ifdef APP-PLUS || MP -->
 							<icon type="clear" :size="15"></icon>
@@ -23,8 +23,8 @@
 				</view>
 			</view>
 			<view class="tui-list search-result" v-if="inputShowed">
-				<view class="tui-list-cell" hover-class="tui-list-cell-hover" v-for="(item,index) in searchResult" :key="index"
-				 @tap="selectCity" :data-name="item" :hover-stay-time='150'>
+				<view class="tui-list-cell" hover-class="tui-list-cell-hover" v-for="(item,index) in searchResult"
+					:key="index" @tap="selectCity" :data-name="item" :hover-stay-time='150'>
 					<view class="tui-list-cell-navigate">
 						{{item}}
 					</view>
@@ -41,30 +41,34 @@
 				<view class="hot-city">
 					<view class="title">热门城市</view>
 					<view class="city-names">
-						<view class="city-name-item" v-for="(item,index) in hotCity" :key="index" hover-class="tap-city" :hover-stay-time="150"
-						 @tap="selectCity" :data-name="item">
+						<view class="city-name-item" v-for="(item,index) in hotCity" :key="index" hover-class="tap-city"
+							:hover-stay-time="150" @tap="selectCity" :data-name="item">
 							{{item}}
 						</view>
 					</view>
 				</view>
 				<view class="tui-list city-list">
-					<block v-for="(list,index) in lists" :key="index" v-if="list.data[0]">
-						<view class="tui-list-cell-divider" :id="index === 0 ? 'suoyin' : list.letter">
-							{{list.letter}}
-						</view>
-						<view class="tui-list-cell" hover-class="tui-list-cell-hover" v-for="(item,index2) in list.data" :key="index2"
-						 @tap="selectCity" :data-name="item.cityName" :hover-stay-time='150'>
-							<view class="tui-list-cell-navigate" :class="[list.data.length-1==index?'last':'']">
-								{{item.cityName}}
+					<view v-for="(list,index) in lists" :key="index">
+						<template v-if="list.data[0]">
+							<view class="tui-list-cell-divider" :id="index === 0 ? 'suoyin' : list.letter">
+								{{list.letter}}
 							</view>
-						</view>
-					</block>
+							<view class="tui-list-cell" hover-class="tui-list-cell-hover" v-for="(item,index2) in list.data"
+								:key="index2" @tap="selectCity" :data-name="item.cityName" :hover-stay-time='150'>
+								<view class="tui-list-cell-navigate" :class="[list.data.length-1==index?'last':'']">
+									{{item.cityName}}
+								</view>
+							</view>
+						</template>
+					</view>
 				</view>
 			</view>
 		</scroll-view>
-		<view class="tui-indexed-list-bar" :style="{height:indexBarHeight+'px'}" @touchstart="touchStart" @touchmove.stop="touchMove"
-		 @touchend.stop="touchEnd" @touchcancel.stop="touchCancel" v-if="!inputVal">
-			<text v-for="(items,index) in lists" :key="index" class="tui-indexed-list-text" :style="{height:indexBarItemHeight+'px'}">
+		<view class="tui-indexed-list-bar" :style="{height:indexBarHeight+'px'}" @touchstart="touchStart"
+			@touchmove.stop.prevent="touchMove" @touchend.stop="touchEnd" @touchcancel.stop="touchCancel"
+			v-if="!inputVal">
+			<text v-for="(items,index) in lists" :key="index" @tap="handleClick(index)" class="tui-indexed-list-text"
+				:style="{height:indexBarItemHeight+'px'}">
 				{{index==0?"索引":items.letter}}
 			</text>
 		</view>
@@ -75,7 +79,7 @@
 </template>
 
 <script>
-	const cityData = require('@/utils/city.js')
+	import cityData from '@/utils/city.js'
 	export default {
 		data() {
 			return {
@@ -102,9 +106,15 @@
 					success: function(res) {
 						let winHeight = res.windowHeight
 						let barHeight = winHeight - uni.upx2px(204);
-						that.winHeight = winHeight;
 						that.indexBarHeight = barHeight;
+						that.winHeight = winHeight;
 						that.indexBarItemHeight = barHeight / 25;
+						// #ifdef APP-PLUS
+						 // #ifdef VUE3
+						    that.winHeight = barHeight;
+						    that.indexBarItemHeight = barHeight / 30;
+						 // #endif
+						// #endif
 						that.titleHeight = uni.upx2px(132);
 						that.lists = cityData.list
 					}
@@ -141,7 +151,7 @@
 			selectCity(e) {
 				let cityName = e.currentTarget.dataset.name;
 				//返回并刷新上一页面
-				this.$eventHub.$emit('emit', cityName)
+				uni.$emit('emit', cityName)
 				uni.navigateBack({
 					delta: 1
 				})
@@ -172,6 +182,14 @@
 			touchCancel() {
 				this.touchmove = false;
 				this.touchmoveIndex = -1;
+			},
+			handleClick(index) {
+				if (index === undefined || this.touchmove) return;
+				let item = this.lists[index]
+				if (item) {
+					this.scrollViewId = item.letter;
+					this.touchmoveIndex = index;
+				}
 			}
 		}
 	}
@@ -236,7 +254,7 @@
 	.icon-clear .tui-icon-class {
 		display: block
 	}
-	
+
 	.search-bar-label {
 		height: 64rpx;
 		display: flex;

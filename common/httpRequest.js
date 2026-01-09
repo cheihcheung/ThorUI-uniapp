@@ -1,7 +1,7 @@
 /**
  * 常用方法封装 请求，文件上传等
  * @author echo. 
- **/
+ **/ 
 
 const tui = {
 	//接口地址
@@ -20,7 +20,7 @@ const tui = {
 	},
 	modal: function(title, content, showCancel, callback, confirmColor, confirmText) {
 		uni.showModal({
-			title: '提示',
+			title: title || '提示',
 			content: content,
 			showCancel: showCancel,
 			cancelColor: "#555",
@@ -39,6 +39,16 @@ const tui = {
 		const res = uni.getSystemInfoSync();
 		return res.platform.toLocaleLowerCase() == "android"
 	},
+	isPhoneX: function() {
+		const res = uni.getSystemInfoSync();
+		let iphonex = false;
+		let models = ['iphonex', 'iphonexr', 'iphonexsmax', 'iphone11', 'iphone11pro', 'iphone11promax']
+		const model = res.model.replace(/\s/g, "").toLowerCase()
+		if (models.includes(model)) {
+			iphonex = true;
+		}
+		return iphonex;
+	},
 	constNum: function() {
 		let time = 0;
 		// #ifdef APP-PLUS
@@ -47,6 +57,12 @@ const tui = {
 		return time
 	},
 	delayed: null,
+	showLoading: function(title, mask = true) {
+		uni.showLoading({
+			mask: mask,
+			title: title || '请稍候...'
+		})
+	},
 	/**
 	 * 请求数据处理
 	 * @param string url 请求地址
@@ -61,22 +77,22 @@ const tui = {
 	 *  true: 隐藏
 	 *  false:显示
 	 */
-	request: function(url, method, postData, isDelay, isForm, hideLoading) {
+	request: async function(url, method, postData, isDelay, isForm, hideLoading) {
 		//接口请求
 		let loadding = false;
 		tui.delayed && uni.hideLoading();
 		clearTimeout(tui.delayed);
 		tui.delayed = null;
 		if (!hideLoading) {
-			tui.delayed = setTimeout(() => {
-				uni.showLoading({
-					mask: true,
-					title: '请稍候...',
-					success(res) {
-						loadding = true
-					}
-				})
-			}, isDelay ? 1000 : 0)
+			if (isDelay) {
+				tui.delayed = setTimeout(() => {
+					loadding = true
+					tui.showLoading()
+				}, 1000)
+			} else {
+				loadding = true
+				tui.showLoading()
+			}
 		}
 
 		return new Promise((resolve, reject) => {
@@ -95,16 +111,6 @@ const tui = {
 					if (loadding && !hideLoading) {
 						uni.hideLoading()
 					}
-					// if (res.data && res.data.code == 1) {
-					// 	uni.clearStorageSync()
-					// 	tui.modal("登录信息已失效，请重新登录", false, () => {
-					// 		//store.commit("logout") 登录页面执行
-					// 		uni.redirectTo({
-					// 			url: '/pages/common/login/login'
-					// 		})
-					// 	})
-					// 	return
-					// }
 					resolve(res.data)
 				},
 				fail: (res) => {
@@ -122,9 +128,7 @@ const tui = {
 	 * @param string src 文件路径
 	 */
 	uploadFile: function(url, src) {
-		uni.showLoading({
-			title: '请稍候...'
-		})
+		tui.showLoading()
 		return new Promise((resolve, reject) => {
 			const uploadTask = uni.uploadFile({
 				url: tui.interfaceUrl() + url,
@@ -165,7 +169,7 @@ const tui = {
 		// #endif
 	},
 	//设置用户信息
-	setUserInfo: function(mobile,token) {
+	setUserInfo: function(mobile, token) {
 		//uni.setStorageSync("thorui_token", token)
 		uni.setStorageSync("thorui_mobile", mobile)
 	},

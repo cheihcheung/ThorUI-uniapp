@@ -23,11 +23,16 @@
 			<view class="tui-content">
 				您可以通过反馈或者以下方式联系我！
 			</view>
-			<view class="tui-content tui-content-email" @tap="copy('1062884167@qq.com')">邮箱：1062884167@qq.com</view>
-			<view class="tui-content tui-content-email" @tap="copy('605135318')">QQ交流群3：605135318</view>
+			<view class="tui-content tui-content-email" @tap="copy('1062884167@qq.com','邮箱已复制')">邮箱：1062884167@qq.com</view>
+			<view class="tui-content tui-content-email" @tap="copy('605135318','QQ群号已复制')">QQ交流群3：605135318</view>
+			<view class="tui-content tui-content-email" @tap="copy('3168647172','QQ已复制')">合作付费QQ：3168647172</view>
 			<view class="tui-footer">
 				<image src='/static/images/my/applets.jpg' class="tui-applets" mode="widthFix"></image>
 				<view class="tui-footer-text">扫描二维码，您的朋友也可以体验Thor UI！</view>
+			</view>
+			<view class="tui-footer" @tap="openThorUI">
+				<image src='https://thorui.cn/img/applets_extend.jpg' class="tui-applets" mode="widthFix"></image>
+				<view class="tui-footer-text">扫描二维码，您的朋友也可以体验Thor UI示例！</view>
 			</view>
 		</view>
 
@@ -35,7 +40,7 @@
 </template>
 
 <script>
-	const thorui = require("@/components/common/tui-clipboard/tui-clipboard.js")
+	import thorui from '@/components/common/tui-clipboard/tui-clipboard.js'
 	import {
 		mapState
 	} from 'vuex'
@@ -47,14 +52,14 @@
 			}
 		},
 		methods: {
-			copy: function(text) {
+			copy: function(text,msg) {
 				const that = this
 				thorui.getClipboardData(text, (res) => {
 					// #ifdef H5 || MP-ALIPAY
 					if (res) {
-						this.tui.toast("链接复制成功")
+						this.tui.toast(msg)
 					} else {
-						this.tui.toast("链接复制失败")
+						this.tui.toast("内容复制失败")
 					}
 					// #endif
 				})
@@ -63,6 +68,25 @@
 				uni.navigateTo({
 					url: '../log/log'
 				})
+			},
+			openThorUI() {
+				// #ifdef MP-WEIXIN
+				wx.navigateToMiniProgram({
+					appId: 'wxd3c1da92cb8fcf40'
+				});
+				// #endif
+			
+				// #ifndef  MP-WEIXIN
+				if (this.sweixin) {
+					this.sweixin.launchMiniProgram({
+						id: 'gh_78d54c9830d3'
+					});
+				} else {
+					uni.previewImage({
+						urls: ['https://thorui.cn/img/applets_extend.jpg']
+					});
+				}
+				// #endif
 			}
 		}
 	}

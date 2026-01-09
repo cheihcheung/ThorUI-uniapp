@@ -74,6 +74,38 @@
 
 /* color start*/
 
+.tui-color-primary {
+	color: #5677fc;
+}
+
+.tui-color-success {
+	color: #19be6b;
+}
+
+.tui-color-warning {
+	color: #ff7900;
+}
+
+.tui-color-error {
+	color: #EB0909;
+}
+
+.tui-color-blue {
+	color: #007AFF;
+}
+
+.tui-color-blue {
+	color: #007AFF;
+}
+
+.tui-color-white {
+	color: #ffffff;
+}
+
+.tui-color-pink {
+	color: #f74d54;
+}
+
 .tui-primary {
 	background-color: #5677fc !important;
 	color: #fff;
@@ -219,7 +251,7 @@
 	align-items: flex-start;
 }
 
-.tui-vertical-top {
+.tui-vertical-bottom {
 	align-items: flex-end;
 }
 
@@ -1136,6 +1168,7 @@
 	padding-right: 0;
 	overflow: visible;
 }
+
 .tui-btn-base {
 	width: auto;
 	/* #ifdef MP-ALIPAY */
@@ -2191,7 +2224,7 @@
 /* #endif */
 
 /* #ifndef MP-WEIXIN */
->>>.tui-checkbox .uni-checkbox-input {
+::v-deep .tui-checkbox .uni-checkbox-input {
 	width: 36rpx;
 	height: 36rpx;
 	border-radius: 50% !important;
@@ -2199,8 +2232,8 @@
 	border-color: #d1d1d1 !important;
 }
 
->>>.tui-checkbox .uni-checkbox-input.uni-checkbox-input-checked {
-	background: #F82400;
+::v-deep .tui-checkbox .uni-checkbox-input.uni-checkbox-input-checked  {
+	background: #F82400 !important;
 	width: 40rpx;
 	height: 40rpx;
 	border: none;
@@ -2256,29 +2289,35 @@
 }
 
 /*Input输入框*/
-.tui-input-item{
+.tui-input-item {
 	width: 100%;
 	display: flex;
 	align-items: center;
 	font-size: 32rpx;
-	
+
 }
-.tui-input{
+
+.tui-input {
 	flex: 1;
+	font-size: 32rpx;
+	overflow: visible;
 }
-.tui-input-title{
+
+.tui-input-title {
 	min-width: 140rpx;
 	padding-right: 12rpx;
 	flex-shrink: 0;
 }
-.tui-phcolor{
+
+.tui-phcolor {
 	color: #ccc;
 	font-size: 32rpx;
+	overflow: visible;
 }
 
-.tui-input-border{
+.tui-input-border {
 	/* border: 1rpx solid #eaeef1; */
-	padding:20rpx 30rpx;
+	padding: 20rpx 30rpx;
 	border-radius: 4rpx;
 	position: relative;
 	font-size: 32rpx;
@@ -2300,7 +2339,7 @@
 	pointer-events: none;
 }
 
-.tui-text-right{
+.tui-text-right {
 	text-align: right;
 }
 

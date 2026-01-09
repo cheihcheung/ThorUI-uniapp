@@ -59,7 +59,7 @@
 			// #ifdef H5
 			"titleNView": false,
 			// #endif
-			"backgroundColorTop": "#5677FC",
+			"navigationBarTitleText": "未能连接到互联网",
 			"app-plus": {
 				"bounce": "vertical"
 			}
@@ -80,6 +80,20 @@
 		"style": {
 			"app-plus": {
 				"bounce": "vertical"
+			}
+		}
+	}, {
+		"path": "pages/common/update/update",
+		"style": {
+			"backgroundColorTop": "#fff",
+			"backgroundColorBottom": "#fff",
+			"app-plus": {
+				"navigationBarTitleText": "",
+				// #ifndef MP
+				"titleNView": false,
+				// #endif
+				"scrollIndicator": "none",
+				"popGesture": "none"
 			}
 		}
 	}, {
@@ -109,7 +123,7 @@
 			"app-plus": {
 				"bounce": "vertical"
 			}
-		}
+		} 
 	}, {
 		"path": "pages/index/color/color",
 		"style": {
@@ -363,6 +377,9 @@
 		"pages": [{
 			"path": "icon/icon",
 			"style": {
+				// #ifdef H5
+				"titleNView": false,
+				// #endif
 				"navigationBarBackgroundColor": "#FFFFFF",
 				"navigationBarTextStyle": "black",
 				"navigationBarTitleText": "icon",
@@ -373,6 +390,9 @@
 		}, {
 			"path": "button/button",
 			"style": {
+				// #ifdef H5
+				"titleNView": false,
+				// #endif
 				"navigationBarBackgroundColor": "#FFFFFF",
 				"navigationBarTextStyle": "black",
 				"navigationBarTitleText": "Button",
@@ -383,6 +403,9 @@
 		}, {
 			"path": "tag/tag",
 			"style": {
+				// #ifdef H5
+				"titleNView": false,
+				// #endif
 				"navigationBarBackgroundColor": "#FFFFFF",
 				"navigationBarTextStyle": "black",
 				"navigationBarTitleText": "Tag",
@@ -394,6 +417,9 @@
 		}, {
 			"path": "badge/badge",
 			"style": {
+				// #ifdef H5
+				"titleNView": false,
+				// #endif
 				"navigationBarBackgroundColor": "#FFFFFF",
 				"navigationBarTextStyle": "black",
 				"navigationBarTitleText": "Badge",
@@ -404,6 +430,9 @@
 		}, {
 			"path": "list/list",
 			"style": {
+				// #ifdef H5
+				"titleNView": false,
+				// #endif
 				"navigationBarBackgroundColor": "#FFFFFF",
 				"navigationBarTextStyle": "black",
 				"navigationBarTitleText": "List",
@@ -414,6 +443,9 @@
 		}, {
 			"path": "card/card",
 			"style": {
+				// #ifdef H5
+				"titleNView": false,
+				// #endif
 				"backgroundColorTop": "#EDEDED",
 				"backgroundColorBottom": "#EDEDED",
 				"navigationBarBackgroundColor": "#FFFFFF",
@@ -426,6 +458,9 @@
 		}, {
 			"path": "grid/grid",
 			"style": {
+				// #ifdef H5
+				"titleNView": false,
+				// #endif
 				"navigationBarBackgroundColor": "#FFFFFF",
 				"navigationBarTextStyle": "black",
 				"navigationBarTitleText": "Grid",
@@ -436,6 +471,9 @@
 		}, {
 			"path": "loading/loading",
 			"style": {
+				// #ifdef H5
+				"titleNView": false,
+				// #endif
 				"navigationBarBackgroundColor": "#FFFFFF",
 				"navigationBarTextStyle": "black",
 				"navigationBarTitleText": "Loading",
@@ -446,6 +484,9 @@
 		}, {
 			"path": "footer/footer",
 			"style": {
+				// #ifdef H5
+				"titleNView": false,
+				// #endif
 				"navigationBarBackgroundColor": "#FFFFFF",
 				"navigationBarTextStyle": "black",
 				"navigationBarTitleText": "Footer",
@@ -497,6 +538,9 @@
 		}, {
 			"path": "keyboard/keyboard",
 			"style": {
+				// #ifdef H5
+				"titleNView": false,
+				// #endif
 				"navigationBarBackgroundColor": "#FFFFFF",
 				"navigationBarTextStyle": "black",
 				"navigationBarTitleText": "数字键盘",
@@ -529,6 +573,9 @@
 		}, {
 			"path": "timeaxis/timeaxis",
 			"style": {
+				// #ifdef H5
+				"titleNView": false,
+				// #endif
 				"navigationBarTitleText": "时间轴",
 				"app-plus": {
 					"bounce": "vertical"
@@ -545,6 +592,9 @@
 		}, {
 			"path": "steps/steps",
 			"style": {
+				// #ifdef H5
+				"titleNView": false,
+				// #endif
 				"navigationBarTitleText": "步骤条",
 				"app-plus": {
 					"bounce": "vertical"
@@ -553,6 +603,9 @@
 		}, {
 			"path": "calendar/calendar",
 			"style": {
+				// #ifdef H5
+				"titleNView": false,
+				// #endif
 				"navigationBarBackgroundColor": "#FFFFFF",
 				"navigationBarTextStyle": "black",
 				"navigationBarTitleText": "日历",
@@ -563,6 +616,9 @@
 		}, {
 			"path": "popup/popup",
 			"style": {
+				// #ifdef H5
+				"titleNView": false,
+				// #endif
 				"navigationBarTitleText": "弹层、下拉选择",
 				"mp-weixin": {
 					"disableScroll": true
@@ -580,6 +636,9 @@
 		}, {
 			"path": "actionsheet/actionsheet",
 			"style": {
+				// #ifdef H5
+				"titleNView": false,
+				// #endif
 				"navigationBarBackgroundColor": "#FFFFFF",
 				"navigationBarTextStyle": "black",
 				"navigationBarTitleText": "操作菜单",
@@ -590,6 +649,9 @@
 		}, {
 			"path": "numberbox/numberbox",
 			"style": {
+				// #ifdef H5
+				"titleNView": false,
+				// #endif
 				"navigationBarBackgroundColor": "#fff",
 				"navigationBarTextStyle": "black",
 				"navigationBarTitleText": "数字输入框",
@@ -600,6 +662,9 @@
 		}, {
 			"path": "rate/rate",
 			"style": {
+				// #ifdef H5
+				"titleNView": false,
+				// #endif
 				"navigationBarBackgroundColor": "#fff",
 				"navigationBarTextStyle": "black",
 				"navigationBarTitleText": "Rate评分",
@@ -610,6 +675,9 @@
 		}, {
 			"path": "modal/modal",
 			"style": {
+				// #ifdef H5
+				"titleNView": false,
+				// #endif
 				"navigationBarBackgroundColor": "#fff",
 				"navigationBarTextStyle": "black",
 				"navigationBarTitleText": "modal",
@@ -620,6 +688,9 @@
 		}, {
 			"path": "countdown/countdown",
 			"style": {
+				// #ifdef H5
+				"titleNView": false,
+				// #endif
 				"navigationBarBackgroundColor": "#fff",
 				"navigationBarTextStyle": "black",
 				"navigationBarTitleText": "倒计时",
@@ -630,6 +701,9 @@
 		}, {
 			"path": "divider/divider",
 			"style": {
+				// #ifdef H5
+				"titleNView": false,
+				// #endif
 				"navigationBarBackgroundColor": "#fff",
 				"navigationBarTextStyle": "black",
 				"navigationBarTitleText": "分隔符",
@@ -640,6 +714,9 @@
 		}, {
 			"path": "carousel/carousel",
 			"style": {
+				// #ifdef H5
+				"titleNView": false,
+				// #endif
 				"navigationBarBackgroundColor": "#fff",
 				"navigationBarTextStyle": "black",
 				"backgroundColorTop": "#fff",
@@ -651,6 +728,9 @@
 		}, {
 			"path": "goTop/goTop",
 			"style": {
+				// #ifdef H5
+				"titleNView": false,
+				// #endif
 				"navigationBarTitleText": "回到顶部",
 				"navigationBarBackgroundColor": "#fff",
 				"navigationBarTextStyle": "black",
@@ -661,6 +741,9 @@
 		}, {
 			"path": "alert/alert",
 			"style": {
+				// #ifdef H5
+				"titleNView": false,
+				// #endif
 				"navigationBarTitleText": "alert弹框",
 				"navigationBarBackgroundColor": "#fff",
 				"navigationBarTextStyle": "black",
@@ -671,6 +754,9 @@
 		}, {
 			"path": "nodata/nodata",
 			"style": {
+				// #ifdef H5
+				"titleNView": false,
+				// #endif
 				"navigationBarTitleText": "No Data",
 				"navigationBarBackgroundColor": "#fff",
 				"navigationBarTextStyle": "black",
@@ -681,6 +767,9 @@
 		}, {
 			"path": "toast/toast",
 			"style": {
+				// #ifdef H5
+				"titleNView": false,
+				// #endif
 				"navigationBarTitleText": "扩展toast",
 				"navigationBarBackgroundColor": "#fff",
 				"navigationBarTextStyle": "black",
@@ -691,6 +780,9 @@
 		}, {
 			"path": "formValidation/formValidation",
 			"style": {
+				// #ifdef H5
+				"titleNView": false,
+				// #endif
 				"navigationBarTitleText": "表单验证",
 				"navigationBarBackgroundColor": "#fff",
 				"navigationBarTextStyle": "black",
@@ -701,6 +793,9 @@
 		}, {
 			"path": "picker-dateTime/picker-dateTime",
 			"style": {
+				// #ifdef H5
+				"titleNView": false,
+				// #endif
 				"navigationBarTitleText": "日期时间选择",
 				"navigationBarBackgroundColor": "#fff",
 				"navigationBarTextStyle": "black",
@@ -711,6 +806,9 @@
 		}, {
 			"path": "clipboard/clipboard",
 			"style": {
+				// #ifdef H5
+				"titleNView": false,
+				// #endif
 				"navigationBarTitleText": "复制文本",
 				"navigationBarBackgroundColor": "#fff",
 				"navigationBarTextStyle": "black",
@@ -721,6 +819,9 @@
 		}, {
 			"path": "fab/fab",
 			"style": {
+				// #ifdef H5
+				"titleNView": false,
+				// #endif
 				"navigationBarTitleText": "悬浮按钮",
 				"navigationBarBackgroundColor": "#fff",
 				"navigationBarTextStyle": "black",
@@ -731,6 +832,9 @@
 		}, {
 			"path": "tabbar/tabbar",
 			"style": {
+				// #ifdef H5
+				"titleNView": false,
+				// #endif
 				"navigationBarTitleText": "Tabbar",
 				"navigationBarBackgroundColor": "#fff",
 				"navigationBarTextStyle": "black",
@@ -741,6 +845,9 @@
 		}, {
 			"path": "tabs/tabs",
 			"style": {
+				// #ifdef H5
+				"titleNView": false,
+				// #endif
 				"navigationBarTitleText": "tabs标签页",
 				"navigationBarBackgroundColor": "#fff",
 				"navigationBarTextStyle": "black",
@@ -751,6 +858,9 @@
 		}, {
 			"path": "collapse/collapse",
 			"style": {
+				// #ifdef H5
+				"titleNView": false,
+				// #endif
 				"navigationBarTitleText": "collapse折叠面板",
 				"navigationBarBackgroundColor": "#fff",
 				"navigationBarTextStyle": "black",
@@ -761,6 +871,9 @@
 		}, {
 			"path": "upload/upload",
 			"style": {
+				// #ifdef H5
+				"titleNView": false,
+				// #endif
 				"navigationBarTitleText": "图片上传",
 				"navigationBarBackgroundColor": "#fff",
 				"navigationBarTextStyle": "black",
@@ -771,6 +884,9 @@
 		}, {
 			"path": "skeleton/skeleton",
 			"style": {
+				// #ifdef H5
+				"titleNView": false,
+				// #endif
 				"navigationBarBackgroundColor": "#fff",
 				"navigationBarTextStyle": "black",
 				"navigationBarTitleText": "骨架屏",
@@ -781,6 +897,9 @@
 		}, {
 			"path": "request/request",
 			"style": {
+				// #ifdef H5
+				"titleNView": false,
+				// #endif
 				"navigationBarBackgroundColor": "#fff",
 				"navigationBarTextStyle": "black",
 				"navigationBarTitleText": "网络请求",
@@ -791,6 +910,9 @@
 		}, {
 			"path": "luckdraw/luckdraw",
 			"style": {
+				// #ifdef H5
+				"titleNView": false,
+				// #endif
 				"navigationBarBackgroundColor": "#FC4034",
 				"navigationBarTitleText": "抽奖",
 				"app-plus": {
@@ -808,6 +930,9 @@
 		}, {
 			"path": "drawer/drawer",
 			"style": {
+				// #ifdef H5
+				"titleNView": false,
+				// #endif
 				"navigationBarTitleText": "drawer 抽屉",
 				"navigationBarBackgroundColor": "#fff",
 				"navigationBarTextStyle": "black",
@@ -818,6 +943,9 @@
 		}, {
 			"path": "swipeAction/swipeAction",
 			"style": {
+				// #ifdef H5
+				"titleNView": false,
+				// #endif
 				"navigationBarTitleText": "滑动菜单",
 				"navigationBarBackgroundColor": "#fff",
 				"navigationBarTextStyle": "black",
@@ -828,6 +956,9 @@
 		}, {
 			"path": "bottom-navigation/bottom-navigation",
 			"style": {
+				// #ifdef H5
+				"titleNView": false,
+				// #endif
 				"navigationBarBackgroundColor": "#FFFFFF",
 				"navigationBarTextStyle": "black",
 				"navigationBarTitleText": "底部导航菜单",
@@ -840,6 +971,9 @@
 		}, {
 			"path": "selection/selection",
 			"style": {
+				// #ifdef H5
+				"titleNView": false,
+				// #endif
 				"navigationBarBackgroundColor": "#FFFFFF",
 				"navigationBarTextStyle": "black",
 				"navigationBarTitleText": "级联选择",
@@ -850,6 +984,9 @@
 		}, {
 			"path": "cropper/cropper",
 			"style": {
+				// #ifdef H5
+				"titleNView": false,
+				// #endif
 				"navigationBarBackgroundColor": "#FFFFFF",
 				"navigationBarTextStyle": "black",
 				"navigationBarTitleText": "图片裁剪",
@@ -860,6 +997,9 @@
 		}, {
 			"path": "circular-progress/circular-progress",
 			"style": {
+				// #ifdef H5
+				"titleNView": false,
+				// #endif
 				"navigationBarBackgroundColor": "#FFFFFF",
 				"navigationBarTextStyle": "black",
 				"navigationBarTitleText": "圆形进度条",
@@ -873,7 +1013,9 @@
 				"navigationBarBackgroundColor": "#FFFFFF",
 				"navigationBarTextStyle": "black",
 				"navigationBarTitleText": "NavBar自定义导航栏",
+				// #ifndef MP
 				"titleNView": false,
+				// #endif
 				"navigationStyle": "custom",
 				"app-plus": {
 					"bounce": "vertical"
@@ -900,6 +1042,9 @@
 		}, {
 			"path": "image/image",
 			"style": {
+				// #ifdef H5
+				"titleNView": false,
+				// #endif
 				"navigationBarBackgroundColor": "#FFFFFF",
 				"navigationBarTextStyle": "black",
 				"navigationBarTitleText": "图片组合",
@@ -913,7 +1058,9 @@
 				"navigationBarBackgroundColor": "#FFFFFF",
 				"navigationBarTextStyle": "black",
 				"navigationBarTitleText": "图片裁剪",
+				// #ifndef MP
 				"titleNView": false,
+				// #endif
 				"navigationStyle": "custom",
 				"mp-weixin": {
 					"disableScroll": true
@@ -934,7 +1081,9 @@
 				"navigationBarBackgroundColor": "#FFFFFF",
 				"navigationBarTextStyle": "black",
 				"navigationBarTitleText": "图片裁剪",
+				// #ifndef MP
 				"titleNView": false,
+				// #endif
 				"navigationStyle": "custom",
 				"mp-weixin": {
 					"disableScroll": true
@@ -949,149 +1098,75 @@
 					"disableScroll": true
 				}
 			}
-		}]
-	}, {
-		"root": "pages/template/",
-		"pages": [{
-			"path": "login/login/login",
-			"style": {
-				"navigationBarTitleText": "",
-				"navigationBarBackgroundColor": "#fafafa",
-				"navigationBarTextStyle": "black",
-				"app-plus": {
-					"bounce": "vertical",
-					"titleNView": false
-				}
-			}
 		}, {
-			"path": "login/reg/reg",
+			"path": "color-analysis/color-analysis",
 			"style": {
-				"navigationBarTitleText": "",
-				"navigationBarBackgroundColor": "#fafafa",
-				"navigationBarTextStyle": "black",
-				"app-plus": {
-					"bounce": "vertical"
-				}
-			}
-		}, {
-			"path": "login/forgetPwd/forgetPwd",
-			"style": {
-				"navigationBarTitleText": "",
-				"navigationBarBackgroundColor": "#fafafa",
-				"navigationBarTextStyle": "black",
-				"app-plus": {
-					"bounce": "vertical"
-				}
-			}
-		}, {
-			"path": "news/index/index",
-			"style": {
-				"navigationBarTitleText": "新闻列表",
-				"enablePullDownRefresh": true,
-				"onReachBottomDistance": 50,
-				"app-plus": {
-					"bounce": "vertical"
-				}
-			}
-		}, {
-			"path": "news/search/search",
-			"style": {
-				"navigationBarTitleText": "搜索",
+				// #ifdef H5
+				"titleNView": false,
+				// #endif
+				"navigationBarTitleText": "颜色分析器",
 				"navigationBarBackgroundColor": "#fff",
 				"navigationBarTextStyle": "black",
-				"backgroundColorTop": "#fff",
-				"backgroundColorBottom": "#fff",
 				"app-plus": {
 					"bounce": "vertical"
 				}
 			}
 		}, {
-			"path": "news/newsDetail/newsDetail",
+			"path": "zhToPinYin/zhToPinYin",
 			"style": {
-				"navigationBarTitleText": "新闻详情",
-				"backgroundColorTop": "#fff",
-				"backgroundColorBottom": "#fff",
-				"onReachBottomDistance": 0,
-				"app-plus": {
-					"bounce": "vertical"
-				}
-			}
-		}, {
-			"path": "news/comment/comment",
-			"style": {
-				"navigationBarTitleText": "发表评论",
-				"backgroundColorTop": "#fff",
-				"backgroundColorBottom": "#fff",
-				"app-plus": {
-					"bounce": "vertical"
-				}
-			}
-		}, {
-			"path": "news/commentList/commentList",
-			"style": {
-				"navigationBarTitleText": "评论",
-				"backgroundColorTop": "#fff",
-				"backgroundColorBottom": "#fff",
-				"enablePullDownRefresh": true,
-				"onReachBottomDistance": 0,
-				"app-plus": {
-					"bounce": "vertical"
-				}
-			}
-		}, {
-			"path": "news/commentReply/commentReply",
-			"style": {
-				"navigationBarTitleText": "回复",
-				"backgroundColorTop": "#fff",
-				"backgroundColorBottom": "#fff",
-				"enablePullDownRefresh": true,
-				"onReachBottomDistance": 0,
-				"app-plus": {
-					"bounce": "vertical"
-				}
-			}
-		}, {
-			"path": "news/newsVideo/newsVideo",
-			"style": {
-				"navigationBarTitleText": "新闻详情",
-				"backgroundColorTop": "#fff",
-				"backgroundColorBottom": "#fff",
-				"onReachBottomDistance": 0,
-				"app-plus": {
-					"bounce": "vertical",
-					"titleNView": {
-						"type": "transparent"
-					}
-				}
-			}
-		}, {
-			"path": "chat/msgList/msgList",
-			"style": {
+				// #ifdef H5
+				"titleNView": false,
+				// #endif
+				"navigationBarTitleText": "中文转拼音",
 				"navigationBarBackgroundColor": "#fff",
 				"navigationBarTextStyle": "black",
-				"navigationBarTitleText": "消息 ",
-				"enablePullDownRefresh": true,
 				"app-plus": {
 					"bounce": "vertical"
 				}
 			}
 		}, {
-			"path": "chat/chat/chat",
+			"path": "stickyWxs/stickyWxs",
 			"style": {
-				"navigationBarBackgroundColor": "#fff",
+				"navigationBarBackgroundColor": "#FFFFFF",
 				"navigationBarTextStyle": "black",
-				"navigationBarTitleText": "技术交流群",
+				"navigationBarTitleText": "吸顶容器wxs",
 				"app-plus": {
-					"bounce": "vertical",
-					"scrollIndicator": "none"
+					"bounce": "vertical"
 				}
 			}
 		}, {
-			"path": "chat/friendList/friendList",
+			"path": "round-progress/round-progress",
 			"style": {
-				"navigationBarBackgroundColor": "#fff",
+				"navigationBarBackgroundColor": "#FFFFFF",
 				"navigationBarTextStyle": "black",
-				"navigationBarTitleText": "联系人 ",
+				"navigationBarTitleText": "圆形进度条",
+				"app-plus": {
+					"bounce": "vertical"
+				}
+			}
+		}, {
+			"path": "cropper-old/cropper-old",
+			"style": {
+				// #ifdef H5
+				"titleNView": false,
+				// #endif
+				"navigationBarBackgroundColor": "#FFFFFF",
+				"navigationBarTextStyle": "black",
+				"navigationBarTitleText": "图片裁剪",
+				"app-plus": {
+					"bounce": "vertical"
+				}
+			}
+		}, {
+			"path": "cropper-custom-old/cropper-custom-old",
+			"style": {
+				"navigationBarBackgroundColor": "#FFFFFF",
+				"navigationBarTextStyle": "black",
+				"navigationBarTitleText": "图片裁剪",
+				// #ifndef MP
+				"titleNView": false,
+				// #endif
+				"navigationStyle": "custom",
 				"mp-weixin": {
 					"disableScroll": true
 				},
@@ -1103,6 +1178,85 @@
 				},
 				"mp-baidu": {
 					"disableScroll": true
+				}
+			}
+		}, {
+			"path": "cropper-default-old/cropper-default-old",
+			"style": {
+				"navigationBarBackgroundColor": "#FFFFFF",
+				"navigationBarTextStyle": "black",
+				"navigationBarTitleText": "图片裁剪",
+				// #ifndef MP
+				"titleNView": false,
+				// #endif
+				"navigationStyle": "custom",
+				"mp-weixin": {
+					"disableScroll": true
+				},
+				"app-plus": {
+					"bounce": "none"
+				},
+				"mp-alipay": {
+					"allowsBounceVertical": "NO"
+				},
+				"mp-baidu": {
+					"disableScroll": true
+				}
+			}
+		}, {
+			"path": "richText/richText",
+			"style": {
+				"navigationBarBackgroundColor": "#FFFFFF",
+				"navigationBarTextStyle": "black",
+				"navigationBarTitleText": "富文本解析",
+				"app-plus": {
+					"bounce": "vertical"
+				}
+			}
+
+		}, {
+			"path": "section/section",
+			"style": {
+				// #ifdef H5
+				"titleNView": false,
+				// #endif
+				"navigationBarTitleText": "标题栏",
+				"enablePullDownRefresh": false
+			}
+
+		}, {
+			"path": "whiteSpace/whiteSpace",
+			"style": {
+				// #ifdef H5
+				"titleNView": false,
+				// #endif
+				"navigationBarTitleText": "上下留白",
+				"enablePullDownRefresh": false
+			}
+
+		}, {
+			"path": "wingBlank/wingBlank",
+			"style": {
+				// #ifdef H5
+				"titleNView": false,
+				// #endif
+				"navigationBarTitleText": "左右留白",
+				"enablePullDownRefresh": false
+			}
+
+		}]
+	}, {
+		"root": "pages/template/",
+		"pages": [{
+			"path": "news/search/search",
+			"style": {
+				"navigationBarTitleText": "搜索",
+				"navigationBarBackgroundColor": "#fff",
+				"navigationBarTextStyle": "black",
+				"backgroundColorTop": "#fff",
+				"backgroundColorBottom": "#fff",
+				"app-plus": {
+					"bounce": "vertical"
 				}
 			}
 		}, {
@@ -1122,235 +1276,9 @@
 				"navigationBarTextStyle": "black",
 				"backgroundColorTop": "#F7F7F7",
 				"backgroundColorBottom": "#F7F7F7",
-				"navigationBarTitleText": "ThorUI商城",
+				"navigationBarTitleText": "会员模板",
 				"enablePullDownRefresh": true,
 				"onReachBottomDistance": 50
-			}
-		}, {
-			"path": "mall/productList/productList",
-			"style": {
-				"navigationBarBackgroundColor": "#fff",
-				"navigationBarTextStyle": "black",
-				"backgroundColorTop": "#F7F7F7",
-				"backgroundColorBottom": "#F7F7F7",
-				"navigationBarTitleText": "商品列表 ",
-				"onReachBottomDistance": 50,
-				"navigationStyle": "custom",
-				"app-plus": {
-					"titleNView": false,
-					"bounce": "vertical"
-				}
-			}
-		}, {
-			"path": "mall/productDetail/productDetail",
-			"style": {
-				"navigationBarBackgroundColor": "#fff",
-				"navigationBarTextStyle": "black",
-				"backgroundColorTop": "#F7F7F7",
-				"backgroundColorBottom": "#F7F7F7",
-				"navigationBarTitleText": "商品详情 ",
-				"navigationStyle": "custom",
-				"app-plus": {
-					"titleNView": false,
-					"bounce": "vertical"
-				}
-			}
-		}, {
-			"path": "mall/address/address",
-			"style": {
-				"navigationBarTitleText": "地址",
-				"navigationBarBackgroundColor": "#fff",
-				"navigationBarTextStyle": "black",
-				"app-plus": {
-					"bounce": "vertical"
-				}
-			}
-		}, {
-			"path": "mall/coupon/coupon",
-			"style": {
-				"navigationBarTitleText": "领券中心",
-				"navigationBarBackgroundColor": "#fff",
-				"navigationBarTextStyle": "black",
-				"backgroundColorTop": "#F5F5F5",
-				"backgroundColorBottom": "#F5F5F5",
-				"enablePullDownRefresh": true,
-				"onReachBottomDistance": 50,
-				"app-plus": {
-					"bounce": "vertical"
-				}
-			}
-		}, {
-			"path": "mall/editAddress/editAddress",
-			"style": {
-				"navigationBarTitleText": "新增地址",
-				"navigationBarBackgroundColor": "#fff",
-				"navigationBarTextStyle": "black",
-				"app-plus": {
-					"bounce": "vertical"
-				}
-			}
-		}, {
-			"path": "mall/my/my",
-			"style": {
-				"navigationBarTitleText": "我的",
-				"navigationBarBackgroundColor": "#fff",
-				"navigationBarTextStyle": "black",
-				"enablePullDownRefresh": true,
-				"onReachBottomDistance": 50,
-				"navigationStyle": "custom",
-				"app-plus": {
-					"titleNView": false,
-					"bounce": "vertical"
-				}
-			}
-		}, {
-			"path": "mall/myOrder/myOrder",
-			"style": {
-				"navigationBarTitleText": "我的订单",
-				"navigationBarBackgroundColor": "#fff",
-				"navigationBarTextStyle": "black",
-				"enablePullDownRefresh": true,
-				"onReachBottomDistance": 50,
-				"app-plus": {
-					"bounce": "vertical"
-				}
-			}
-		}, {
-			"path": "mall/orderDetail/orderDetail",
-			"style": {
-				"navigationBarTitleText": "订单详情",
-				"navigationBarBackgroundColor": "#fff",
-				"navigationBarTextStyle": "black",
-				"app-plus": {
-					"bounce": "vertical"
-				}
-			}
-		}, {
-			"path": "mall/shopcart/shopcart",
-			"style": {
-				"navigationBarTitleText": "购物车",
-				"navigationBarBackgroundColor": "#fff",
-				"navigationBarTextStyle": "black",
-				"enablePullDownRefresh": true,
-				"onReachBottomDistance": 50,
-				"app-plus": {
-					// #ifdef APP-PLUS
-					"titleNView": {
-						"padding-right": "15px",
-						"buttons": [{
-							"text": "编辑",
-							"float": "right",
-							"width": "auto",
-							"fontSize": "15px",
-							"color": "#333"
-						}]
-					},
-					// #endif
-					"bounce": "vertical"
-				}
-			}
-		}, {
-			"path": "mall/set/set",
-			"style": {
-				"navigationBarTitleText": "账户设置",
-				"navigationBarBackgroundColor": "#fff",
-				"navigationBarTextStyle": "black",
-				"app-plus": {
-					"bounce": "vertical"
-				}
-			}
-		}, {
-			"path": "mall/submitOrder/submitOrder",
-			"style": {
-				"navigationBarTitleText": "提交订单",
-				"navigationBarBackgroundColor": "#fff",
-				"navigationBarTextStyle": "black",
-				"app-plus": {
-					"bounce": "vertical"
-				}
-			}
-		}, {
-			"path": "mall/success/success",
-			"style": {
-				"navigationBarTitleText": "支付成功",
-				"navigationBarBackgroundColor": "#fff",
-				"navigationBarTextStyle": "black",
-				"app-plus": {
-					"bounce": "vertical"
-				}
-			}
-		}, {
-			"path": "mall/userInfo/userInfo",
-			"style": {
-				"navigationBarTitleText": "个人信息",
-				"navigationBarBackgroundColor": "#fff",
-				"navigationBarTextStyle": "black",
-				"app-plus": {
-					"bounce": "vertical"
-				}
-			}
-		}, {
-			"path": "mall/classify/classify",
-			"style": {
-				"navigationBarTitleText": "商品分类",
-				"navigationBarBackgroundColor": "#fff",
-				"navigationBarTextStyle": "black",
-				"backgroundColorTop": "#fcfcfc",
-				"backgroundColorBottom": "#fcfcfc",
-				"mp-weixin": {
-					"disableScroll": true
-				},
-				"app-plus": {
-					"bounce": "none"
-				},
-				"mp-alipay": {
-					"allowsBounceVertical": "NO"
-				},
-				"mp-baidu": {
-					"disableScroll": true
-				}
-			}
-		}, {
-			"path": "mall/notice/notice",
-			"style": {
-				"navigationBarTitleText": "消息提醒设置",
-				"navigationBarBackgroundColor": "#fff",
-				"navigationBarTextStyle": "black",
-				"app-plus": {
-					"bounce": "vertical"
-				}
-			}
-		}, {
-			"path": "mall/nickname/nickname",
-			"style": {
-				"navigationBarTitleText": "修改昵称",
-				"navigationBarBackgroundColor": "#fff",
-				"navigationBarTextStyle": "black",
-				"app-plus": {
-					"bounce": "vertical"
-				}
-			}
-		}, {
-			"path": "mall/myCoupon/myCoupon",
-			"style": {
-				"navigationBarTitleText": "我的优惠券",
-				"navigationBarBackgroundColor": "#fff",
-				"navigationBarTextStyle": "black",
-				"enablePullDownRefresh": true,
-				"onReachBottomDistance": 50,
-				"app-plus": {
-					"bounce": "vertical"
-				}
-			}
-		}, {
-			"path": "mall/message/message",
-			"style": {
-				"navigationBarTitleText": "消息中心",
-				"navigationBarBackgroundColor": "#fff",
-				"navigationBarTextStyle": "black",
-				"app-plus": {
-					"bounce": "vertical"
-				}
 			}
 		}]
 	}],

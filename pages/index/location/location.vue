@@ -16,22 +16,19 @@
 		<map id="maps" class="tui-maps" :longitude="longitude" :latitude="latitude" :scale="16" show-location @regionchange="regionchange"
 		 :style="{height:winHeight}">
 			<!-- #ifndef MP-ALIPAY -->
-			<cover-image class="cover-image" src="/static/images/maps/location.png" />
+			<cover-image class="cover-image" src="/static/images/maps/location.png"></cover-image>
+			<cover-image src="/static/images/maps/current.png?v=1" class="tui-current__img" @tap="currentLocation"></cover-image>
 			<!-- #endif -->
 		</map>
 		<!-- #ifdef MP-ALIPAY -->
-		<cover-image class="cover-image" src="/static/images/maps/location.png" />
-		<!-- #endif -->
-		<!-- #ifndef APP-PLUS -->
-		<cover-view class="current-location">
-			<cover-image src="/static/images/maps/current.png" class="current-img" @tap="currentLocation"></cover-image>
-		</cover-view>
+		<cover-image class="cover-image" src="/static/images/maps/location.png"></cover-image>
+		<cover-image src="/static/images/maps/current.png?v=1" class="tui-current__img" @tap="currentLocation"></cover-image>
 		<!-- #endif -->
 	</view>
 </template>
 
 <script>
-	const QQMapWX = require('@/libs/qqmap-wx-jssdk.min.js');
+	import QQMapWX from '@/libs/qqmap-wx-jssdk.min.js';
 	export default {
 		data() {
 			return {
@@ -44,7 +41,6 @@
 				mapCtx: null,
 				location: false,
 				qqmapsdk: null,
-				mapObj: null,
 				winHeight: "100%" //窗口高度
 			}
 		},
@@ -64,8 +60,8 @@
 			if (!this.mapCtx) {
 				this.mapCtx = uni.createMapContext("maps");
 			}
-			this.mapObj = this.mapCtx.$getAppMap();
-			this.mapObj.onstatuschanged = (e) => {
+			let mapObj = this.mapCtx.$getAppMap();
+			mapObj.onstatuschanged = (e) => {
 				// 地图发生变化的时候，获取中间点，也就是cover-image指定的位置
 				if (this.longitude != 114.010857) {
 					this.address = "正在获取地址...";
@@ -75,6 +71,9 @@
 							this.current_long = res.latitude;
 							this.current_lat = res.longitude;
 							this.getAddress(res.longitude, res.latitude);
+						},
+						fail:  (err) => {
+							console.log(err)
 						}
 					})
 				}
@@ -143,10 +142,13 @@
 				uni.getLocation({
 					// #ifdef APP-PLUS || MP-WEIXIN
 					type: 'gcj02',
-					// #endif
+				    // #endif
 					success(res) {
+						// #ifndef VUE3
 						that.latitude = res.latitude;
 						that.longitude = res.longitude;
+						// #endif
+						
 						// #ifdef H5
 						that.getAddressH5(res.longitude, res.latitude)
 						// #endif
@@ -161,7 +163,7 @@
 						// #endif
 
 						// #ifdef MP
-						that.getAddress(res.longitude, res.latitude)
+						that.getAddress(that.longitude, that.latitude)
 						// #endif
 					}
 				})
@@ -172,6 +174,7 @@
 
 <style>
 	page {
+		width: 100%;
 		height: 100%;
 		display: flex;
 		justify-content: center;
@@ -184,13 +187,18 @@
 	}
 
 	.tui-maps {
+		/* #ifndef VUE3 */
 		width: 100%;
+		/* #endif */
+		/* #ifdef VUE3 */
+		width: 750rpx;
+		/* #endif */
 		height: 100%;
 	}
 
 	.cover-image {
-		height: 60rpx;
-		width: 60rpx;
+		height: 68rpx;
+		width: 68rpx;
 		position: fixed;
 		/* #ifdef APP-PLUS */
 		position: absolute;
@@ -250,23 +258,15 @@
 		white-space: nowrap;
 		text-overflow: ellipsis;
 	}
-
-	.current-location {
+	.tui-current__img {
 		position: fixed;
-		height: 76rpx;
-		width: 76rpx;
-		display: flex;
-		align-items: center;
-		justify-content: center;
+		/* #ifdef APP-PLUS */
+		position: absolute;
+		/* #endif */
+		height: 80rpx;
+		width: 80rpx;
 		bottom: 80rpx;
 		right: 60rpx;
-		background: rgba(255, 255, 255, 0.94);
-		border-radius: 38rpx;
-		z-index: 999999;
-	}
-
-	.current-img {
-		width: 42rpx;
-		height: 42rpx;
+		z-index: 9999;
 	}
 </style>

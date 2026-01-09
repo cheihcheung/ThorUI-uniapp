@@ -1,9 +1,13 @@
 <template>
-	<view class="tui-rate-class tui-rate-box" @touchmove="touchMove">
-		<block v-for="(item,index) in quantity" :key="index">
-			<view class="tui-icon tui-relative" :class="['tui-icon-collection'+(hollow && (current<=index || (disabled && current<=index+1))?'':'-fill')]"
-			 :data-index="index" @tap="handleTap" :style="{fontSize:size+'px',color:(current>index+1 || (!disabled && current>index))?active:normal}">
-				<view class="tui-icon tui-icon-main tui-icon-collection-fill" v-if="disabled && current==index+1" :style="{fontSize:size+'px',color:active,width:percent+'%'}"></view>
+	<view class="tui-rate-box" @touchmove="touchMove">
+		<block v-for="(item, index) in numbers" :key="index">
+			<view class="tui-icon"
+				:class="['tui-relative','tui-icon-collection' + (hollow && (current <= index || (disabled && current <= index + 1)) ? '' : '-fill')]"
+				:data-index="index" @tap="handleTap"
+				:style="{ fontSize: size + 'px', color: current > index + 1 || (!disabled && current > index) ? getActiveColor : normal }">
+				<view class="tui-icon" :class="['tui-icon-main','tui-icon-collection-fill']"
+					v-if="disabled && current == index + 1"
+					:style="{ fontSize: size + 'px', color: getActiveColor, width: percent + '%' }"></view>
 			</view>
 		</block>
 	</view>
@@ -11,11 +15,12 @@
 
 <script>
 	export default {
-		name: "tuiRate",
+		name: 'tuiRate',
+		emits: ['change'],
 		props: {
 			//数量
 			quantity: {
-				type: Number,
+				type: [Number, String],
 				default: 5
 			},
 			//当前选中
@@ -41,31 +46,46 @@
 			//未选中颜色
 			normal: {
 				type: String,
-				default: "#b2b2b2"
+				default: '#b2b2b2'
 			},
 			//选中颜色
 			active: {
 				type: String,
-				default: "#e41f19"
+				default: ''
 			},
 			//未选中是否为空心
 			hollow: {
 				type: Boolean,
 				default: false
+			},
+			//自定义参数
+			params: {
+				type: [Number, String],
+				default: 0
+			}
+		},
+		computed: {
+			getActiveColor() {
+				return this.active || (uni && uni.$tui && uni.$tui.color.danger) || '#EB0909';
 			}
 		},
 		data() {
 			return {
 				pageX: 0,
-				percent: 0
+				percent: 0,
+				numbers: []
 			};
 		},
 		created() {
-			this.percent = Number(this.score || 0) * 100
+			this.handleQuantity(this.quantity)
+			this.percent = Number(this.score || 0) * 100;
 		},
 		watch: {
 			score(newVal, oldVal) {
-				this.percent = Number(newVal || 0) * 100
+				this.percent = Number(newVal || 0) * 100;
+			},
+			quantity(val) {
+				this.handleQuantity(val)
 			}
 		},
 		methods: {
@@ -75,8 +95,9 @@
 				}
 				const index = e.currentTarget.dataset.index;
 				this.$emit('change', {
-					index: Number(index) + 1
-				})
+					index: Number(index) + 1,
+					params: this.params
+				});
 			},
 			touchMove(e) {
 				if (this.disabled) {
@@ -92,20 +113,33 @@
 					return;
 				}
 				let index = Math.ceil(distance / this.size);
-				index = index > this.count ? this.count : index;
+				index = index > this.quantity ? this.quantity : index;
 				this.$emit('change', {
-					index: index
-				})
+					index: index,
+					params: this.params
+				});
+			},
+			handleQuantity(quantity) {
+				quantity = Number(quantity) || 5
+				quantity = Math.ceil(quantity)
+				this.numbers = Array.from(new Array(quantity + 1).keys()).slice(1)
 			}
 		},
 		mounted() {
-			const className = '.tui-rate-box';
-			let query = uni.createSelectorQuery().in(this)
-			query.select(className).boundingClientRect((res) => {
-				this.pageX = res.left || 0
-			}).exec()
+			this.$nextTick(()=>{
+				setTimeout(() => {
+					const className = '.tui-rate-box';
+					let query = uni.createSelectorQuery().in(this);
+					query
+						.select(className)
+						.boundingClientRect(res => {
+							this.pageX = res.left || 0;
+						})
+						.exec();
+				}, 80)
+			})
 		}
-	}
+	};
 </script>
 
 <style scoped>
@@ -117,7 +151,7 @@
 	}
 
 	.tui-icon {
-		font-family: "rateFont" !important;
+		font-family: 'rateFont' !important;
 		font-style: normal;
 		-webkit-font-smoothing: antialiased;
 		-moz-osx-font-smoothing: grayscale;
@@ -137,15 +171,14 @@
 	}
 
 	.tui-icon-collection-fill:before {
-		content: "\e6ea";
+		content: '\e6ea';
 	}
 
 	.tui-icon-collection:before {
-		content: "\e6eb";
+		content: '\e6eb';
 	}
 
 	.tui-rate-box {
-		display: -webkit-inline-flex;
 		display: inline-flex;
 		align-items: center;
 		margin: 0;

@@ -1,21 +1,33 @@
 <template>
 	<view class="tui-circular-container" :style="{ width: diam + 'px', height: (height || diam) + 'px' }">
-		<canvas class="tui-circular-default" :canvas-id="defaultCanvasId" :id="defaultCanvasId" :style="{ width: diam + 'px', height: (height || diam) + 'px' }"
-		 v-if="defaultShow"></canvas>
-		<canvas class="tui-circular-progress" :canvas-id="progressCanvasId" :id="progressCanvasId" :style="{ width: diam + 'px', height: (height || diam) + 'px' }"></canvas>
-		<slot />
+		<!-- #ifndef MP-ALIPAY -->
+		<canvas class="tui-circular-default" :canvas-id="defaultCanvasId" :id="defaultCanvasId"
+			:style="{ width: diam + 'px', height: (height || diam) + 'px' }"
+			v-if="defaultShow && defaultCanvasId"></canvas>
+		<canvas class="tui-circular-progress" :canvas-id="progressCanvasId" :id="progressCanvasId"
+			:style="{ width: diam + 'px', height: (height || diam) + 'px' }" v-if="progressCanvasId"></canvas>
+		<!-- #endif -->
+
+		<!-- #ifdef MP-ALIPAY -->
+		<canvas class="tui-circular-default" :canvas-id="defaultCanvasId" :id="defaultCanvasId"
+			:style="{ width: diam*4 + 'px', height: (height || diam)*4 + 'px' }" v-if="defaultShow"></canvas>
+		<canvas class="tui-circular-progress" :canvas-id="progressCanvasId" :id="progressCanvasId"
+			:style="{ width: diam*4 + 'px', height: (height || diam)*4 + 'px' }"></canvas>
+		<!-- #endif -->
+		<slot></slot>
 	</view>
 </template>
 
 <script>
 	export default {
 		name: 'tuiCircularProgress',
+		emits: ['change', 'end'],
 		props: {
 			/*
-			  传值需使用rpx进行转换保证各终端兼容
-			  px = rpx / 750 * wx.getSystemInfoSync().windowWidth
-			  圆形进度条(画布)宽度，直径 [px]
-			*/
+				  传值需使用rpx进行转换保证各终端兼容
+				  px = rpx / 750 * wx.getSystemInfoSync().windowWidth
+				  圆形进度条(画布)宽度，直径 [px]
+				*/
 			diam: {
 				type: Number,
 				default: 60
@@ -31,11 +43,11 @@
 				default: 4
 			},
 			/*
-			 线条的端点样式
-			 butt：向线条的每个末端添加平直的边缘
-			 round	向线条的每个末端添加圆形线帽
-			 square	向线条的每个末端添加正方形线帽
-			*/
+				 线条的端点样式
+				 butt：向线条的每个末端添加平直的边缘
+				 round	向线条的每个末端添加圆形线帽
+				 square	向线条的每个末端添加正方形线帽
+				*/
 			lineCap: {
 				type: String,
 				default: 'round'
@@ -48,7 +60,7 @@
 			//圆环进度字体颜色
 			fontColor: {
 				type: String,
-				default: '#5677fc'
+				default: ''
 			},
 			//是否显示进度文字
 			fontShow: {
@@ -56,9 +68,9 @@
 				default: true
 			},
 			/*
-			 自定义显示文字[默认为空，显示百分比，fontShow=true时生效]
-			 可以使用 slot自定义显示内容
-			*/
+				 自定义显示文字[默认为空，显示百分比，fontShow=true时生效]
+				 可以使用 slot自定义显示内容
+				*/
 			percentText: {
 				type: String,
 				default: ''
@@ -71,12 +83,12 @@
 			//默认进度条颜色
 			defaultColor: {
 				type: String,
-				default: '#CCC'
+				default: '#CCCCCC'
 			},
 			//进度条颜色
 			progressColor: {
 				type: String,
-				default: '#5677fc'
+				default: ''
 			},
 			//进度条渐变颜色[结合progressColor使用，默认为空]
 			gradualColor: {
@@ -114,28 +126,24 @@
 				default: 'backwards'
 			}
 		},
-		computed: {
-			canvasChange() {
-				return `${this.diam},${this.height},${this.lineWidth}`
-			}
-		},
 		watch: {
 			percentage(val) {
-				this.initDraw()
-			},
-			canvasChange() {
-				this.initDraw(true)
+				this.initDraw();
 			}
 		},
 		data() {
+			// #ifndef MP-WEIXIN || MP-QQ
+			let cid = `id01_${Math.ceil(Math.random() * 10e5).toString(36)}`
+			let did = `id02_${Math.ceil(Math.random() * 10e5).toString(36)}`
+			// #endif
 			return {
-				// #ifdef MP-WEIXIN
-				progressCanvasId:"progressCanvasId",
-				defaultCanvasId: "defaultCanvasId",
+				// #ifdef MP-WEIXIN || MP-QQ
+				progressCanvasId: 'progressCanvasId',
+				defaultCanvasId: 'defaultCanvasId',
 				// #endif
-				// #ifndef MP-WEIXIN
-				progressCanvasId:this.getCanvasId(),
-				defaultCanvasId: this.getCanvasId(),
+				// #ifndef MP-WEIXIN || MP-QQ
+				progressCanvasId: cid,
+				defaultCanvasId: did,
 				// #endif
 				progressContext: null,
 				linearGradient: null,
@@ -146,12 +154,17 @@
 			};
 		},
 		mounted() {
-			this.initDraw(true)
+			this.$nextTick(() => {
+				setTimeout(() => {
+					this.initDraw(true);
+				}, 50)
+			})
 		},
 		methods: {
 			//初始化绘制
 			initDraw(init) {
 				let start = this.activeMode === 'backwards' ? 0 : this.startPercentage;
+				start = start > this.percentage ? 0 : start;
 				if (this.defaultShow && init) {
 					this.drawDefaultCircular();
 				}
@@ -160,7 +173,11 @@
 			//默认(背景)圆环
 			drawDefaultCircular() {
 				let ctx = uni.createCanvasContext(this.defaultCanvasId, this);
-				ctx.setLineWidth(this.lineWidth);
+				let lineWidth = Number(this.lineWidth)
+				// #ifdef MP-ALIPAY
+				lineWidth = lineWidth * 4
+				// #endif
+				ctx.setLineWidth(lineWidth);
 				ctx.setStrokeStyle(this.defaultColor);
 				//终止弧度
 				let eAngle = Math.PI * (this.height ? 1 : 2) + this.sAngle;
@@ -173,49 +190,74 @@
 				if (!ctx) {
 					ctx = uni.createCanvasContext(this.progressCanvasId, this);
 					//创建一个线性的渐变颜色 CanvasGradient对象
-					gradient = ctx.createLinearGradient(0, 0, this.diam, 0);
-					gradient.addColorStop('0', this.progressColor);
+					let diam = Number(this.diam)
+					// #ifdef MP-ALIPAY
+					diam = diam * 4
+					// #endif
+					const progressColor = this.progressColor || (uni && uni.$tui && uni.$tui.color.primary) || '#5677fc';
+					gradient = ctx.createLinearGradient(0, 0, diam, 0);
+					gradient.addColorStop('0', progressColor);
 					if (this.gradualColor) {
 						gradient.addColorStop('1', this.gradualColor);
 					}
+					// #ifdef APP-PLUS || MP
+					const res = uni.getSystemInfoSync();
+					if (!this.gradualColor && res.platform.toLocaleLowerCase() == 'android') {
+						gradient.addColorStop('1', progressColor);
+					}
+					// #endif
 					this.progressContext = ctx;
 					this.linearGradient = gradient;
 				}
-				ctx.setLineWidth(this.lineWidth);
+				let lineWidth = Number(this.lineWidth)
+				// #ifdef MP-ALIPAY
+				lineWidth = lineWidth * 4
+				// #endif
+				ctx.setLineWidth(lineWidth);
 				ctx.setStrokeStyle(gradient);
-				let time = this.duration / this.percentage;
-				if (this.percentage > 0 || !this.fontShow) {
+				let time = this.percentage == 0 || this.duration < 50 ? 0 : this.duration / this.percentage;
+				if (this.percentage > 0) {
 					startPercentage = this.duration < 50 ? this.percentage - 1 : startPercentage;
 					startPercentage++;
-					if (startPercentage > this.percentage) {
-						this.$emit('end', {
-							canvasId: this.progressCanvasId
-						});
-						return;
-					}
 				}
 				if (this.fontShow) {
-					ctx.setFontSize(this.fontSize);
-					ctx.setFillStyle(this.fontColor);
+					let fontSize = Number(this.fontSize)
+					// #ifdef MP-ALIPAY
+					fontSize = fontSize * 4
+					// #endif
+					ctx.setFontSize(fontSize);
+					const fontColor = this.fontColor || (uni && uni.$tui && uni.$tui.color.primary) || '#5677fc';
+					ctx.setFillStyle(fontColor);
 					ctx.setTextAlign('center');
 					ctx.setTextBaseline('middle');
 					let percentage = this.percentText;
 					if (!percentage) {
-						percentage = this.counterclockwise ? 100 - startPercentage * this.multiple : startPercentage * this.multiple;
+						percentage = this.counterclockwise ? 100 - startPercentage * this.multiple : startPercentage * this
+							.multiple;
 						percentage = `${percentage}%`;
 					}
 					let radius = this.diam / 2;
+					// #ifdef MP-ALIPAY
+					radius = radius * 4
+					// #endif
 					ctx.fillText(percentage, radius, radius);
-					if (this.percentage === 0 || (this.counterclockwise && startPercentage === 100)) {
-						ctx.draw();
-						return;
-					}
 				}
-				let eAngle = ((2 * Math.PI) / 100) * startPercentage + this.sAngle;
-				this.drawArc(ctx, eAngle);
+				if (this.percentage == 0 || (this.counterclockwise && startPercentage == 100)) {
+					ctx.draw();
+				} else {
+					let eAngle = ((2 * Math.PI) / 100) * startPercentage + this.sAngle;
+					this.drawArc(ctx, eAngle);
+				}
 				setTimeout(() => {
 					this.startPercentage = startPercentage;
-					this.drawProgressCircular(startPercentage);
+					if (startPercentage >= this.percentage) {
+						this.$emit('end', {
+							canvasId: this.progressCanvasId,
+							percentage: startPercentage
+						});
+					} else {
+						this.drawProgressCircular(startPercentage);
+					}
 					this.$emit('change', {
 						percentage: startPercentage
 					});
@@ -229,16 +271,14 @@
 				ctx.setLineCap(this.lineCap);
 				ctx.beginPath();
 				let radius = this.diam / 2; //x=y
-				ctx.arc(radius, radius, radius - this.lineWidth, this.sAngle, eAngle, this.counterclockwise);
+				let lineWidth = Number(this.lineWidth)
+				// #ifdef MP-ALIPAY
+				radius = radius * 4
+				lineWidth = lineWidth * 4
+				// #endif
+				ctx.arc(radius, radius, radius - lineWidth, this.sAngle, eAngle, this.counterclockwise);
 				ctx.stroke();
 				ctx.draw();
-			},
-			//生成canvasId
-			getCanvasId() {
-				let uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, c => {
-					return (c === 'x' ? (Math.random() * 16) | 0 : 'r&0x3' | '0x8').toString(16);
-				});
-				return uuid;
 			}
 		}
 	};
@@ -248,7 +288,17 @@
 	.tui-circular-container,
 	.tui-circular-default {
 		position: relative;
+
 	}
+
+	/* #ifdef MP-ALIPAY */
+	.tui-circular-default,
+	.tui-circular-progress {
+		zoom: 0.25;
+	}
+
+	/* #endif */
+
 
 	.tui-circular-progress {
 		position: absolute;

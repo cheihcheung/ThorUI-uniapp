@@ -5,15 +5,16 @@
 
 /* 颜色变量 */
 
-/* 行为相关颜色 */
+/* 行为相关颜色  */
 $uni-color-primary: #5677fc;
 $uni-color-success: #19be6b;
 $uni-color-warning: #ff7900;
-$uni-color-error: #EB0909;
+$uni-color-error: #EB0909; 
 $uni-color-blue: #007AFF;
 $uni-color-black: #000000;
 $uni-color-white: #ffffff;
 $uni-color-pink:#f74d54;
+$uni-color-link:#586c94;
 
 
 /* 文字基本颜色 */
@@ -51,7 +52,7 @@ $uni-border-radius-lg: 12rpx;
 $uni-border-radius-circle: 50%;
 
 /* 水平间距 */
-$uni-spacing-row-sm: 10px;
+$uni-spacing-row-sm: 10rpx;
 $uni-spacing-row-base: 20rpx;
 $uni-spacing-row-lg: 30rpx;
 

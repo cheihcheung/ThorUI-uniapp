@@ -2,18 +2,26 @@
 	<view class="container">
 		<tui-grid>
 			<block v-for="(item,index) in iconList" :key="index">
-				<tui-grid-item>
+				<tui-grid-item @click="show(item.name)">
 					<view class="tui-grid-icon">
-						<tui-icon :name="item.name" :size="item.size" :color="item.color || '#999'" @click="show(item.name)"></tui-icon>
+						<tui-icon :name="item.name" :size="item.size" :color="item.color || '#999'"></tui-icon>
 					</view>
 					<text class="tui-grid-label">{{item.name}}</text>
 				</tui-grid-item>
 			</block>
+			<!-- 以下为自定义扩展图标 -->
+			<tui-grid-item v-for="(item,index) in extendIcons" :key="index">
+				<view class="tui-grid-icon">
+					<tui-icon custom-prefix="tui-icon__extend" :name="item.name" :size="item.size" color="#999"></tui-icon>
+				</view>
+				<text class="tui-grid-label">{{item.name}}</text>
+			</tui-grid-item>
 		</tui-grid>
 	</view>
 </template>
 
 <script>
+	import thorui from '@/components/common/tui-clipboard/tui-clipboard.js'
 	export default {
 		data() {
 			return {
@@ -238,7 +246,7 @@
 					size: 28
 				}, {
 					name: "house",
-					size:28
+					size: 28
 				}, {
 					name: "imface",
 					size: 28
@@ -375,7 +383,13 @@
 					name: "play",
 					size: 30
 				}, {
+					name: "suspend",
+					size: 30
+				}, {
 					name: "plus",
+					size: 30
+				}, {
+					name: "reduce",
 					size: 30
 				}, {
 					name: "polygonal",
@@ -398,9 +412,6 @@
 				}, {
 					name: "redpacket-fill",
 					size: 32
-				}, {
-					name: "reduce",
-					size: 30
 				}, {
 					name: "refresh",
 					size: 30
@@ -537,6 +548,9 @@
 					name: "unreceive",
 					size: 30
 				}, {
+					name: "seen",
+					size: 30
+				}, {
 					name: "unseen",
 					size: 30
 				}, {
@@ -578,12 +592,46 @@
 				}, {
 					name: "wifi",
 					size: 30
+				}],
+				extendIcons: [{
+					name: 'icon-forbidden',
+					size: 30
+				}, {
+					name: 'icon-forbidden-fill',
+					size: 30
+				}, {
+					name: 'icon-caution',
+					size: 30
+				}, {
+					name: 'icon-caution-fill',
+					size: 30
+				}, {
+					name: 'icon-fb',
+					size: 30
+				}, {
+					name: 'icon-google',
+					size: 30
+				}, {
+					name: 'icon-stackflow',
+					size: 30
+				}, {
+					name: 'icon-youtube',
+					size: 30
+				}, {
+					name: 'icon-github',
+					size: 30
 				}]
 			}
 		},
-		methods:{
-			show(name){
-				this.tui.toast(name)
+		methods: {
+			show(name) {
+				thorui.getClipboardData(name, res => {
+					// #ifdef H5 || MP-ALIPAY
+					if (res) {
+						this.tui.toast(`复制成功：${name}`);
+					}
+					// #endif
+				});
 			}
 		}
 	}

@@ -1,7 +1,7 @@
 <template>
-	<view class="tui-sticky-class">
+	<view class="tui-sticky-class" :id="tui_Id">
 		<!--sticky 容器-->
-		<view :style="{height: stickyHeight,backgroundColor:backgroundColor}" v-if="isFixed"></view>
+		<view :style="{height: stickyHeight,background:backgroundColor}" v-if="isFixed"></view>
 		<view :class="{'tui-sticky-fixed':isFixed}" :style="{top:isFixed?stickyTop+'px':'auto'}">
 			<slot name="header"></slot>
 		</view>
@@ -14,6 +14,7 @@
 <script>
 	export default {
 		name: "tuiSticky",
+		emits: ['sticky', 'change'],
 		props: {
 			scrollTop: {
 				type: Number
@@ -83,17 +84,21 @@
 			this.initialize = this.recalc
 		},
 		mounted() {
-			setTimeout(()=>{
-				this.updateScrollChange();
-			},20)
+			this.$nextTick(() => {
+				setTimeout(() => {
+					this.updateScrollChange();
+				}, 50)
+			})
 		},
 		data() {
+			const Id = `tui_${Math.ceil(Math.random() * 10e5).toString(36)}`
 			return {
 				timer: null,
 				top: 0,
 				height: 0,
 				isFixed: false,
-				initialize: 0 //重新初始化
+				initialize: 0, //重新初始化
+				tui_Id: Id
 			};
 		},
 		methods: {
@@ -125,19 +130,26 @@
 					this.timer = null
 				}
 				this.timer = setTimeout(() => {
-					const className = '.tui-sticky-class';
-					const query = uni.createSelectorQuery().in(this);
-					query.select(className).boundingClientRect((res) => {
-						if (res) {
-							this.top = res.top + (this.scrollTop || 0);
-							this.height = res.height;
-							callback && callback();
-							this.$emit("change", {
-								index: Number(this.index),
-								top: this.top
-							})
-						}
-					}).exec()
+					const selectId = `#${this.tui_Id}`;
+					uni.createSelectorQuery()
+						// #ifndef MP-ALIPAY
+						.in(this)
+						// #endif
+						.select(selectId)
+						.fields({
+							size: true,
+							rect: true
+						}, res => {
+							if (res) {
+								this.top = res.top + (this.scrollTop || 0);
+								this.height = res.height;
+								callback && callback();
+								this.$emit("change", {
+									index: Number(this.index),
+									top: this.top
+								})
+							}
+						}).exec()
 				}, 0)
 			}
 		}
